@@ -1,2 +1,0 @@
-- [x] Add `getVincoloByCodice` to `VincoloDao.kt`
-- [x] Verify build succeeds
