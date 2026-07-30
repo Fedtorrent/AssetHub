@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#212121"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Banda Colorata a tutta altezza -->
+        <View
+            android:id="@+id/view_color_indicator"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="@color/teal_list" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- 1° rigo: Nome (Strumento o Conto) + Importo -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/text_nome"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/text_importo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#4CAF50" />
+                </LinearLayout>
+
+                <!-- 2° rigo: Tipo Strumento + Performance % -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/text_tipo_strumento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#BBBBBB"
+                        android:textSize="13sp" />
+                    <TextView
+                        android:id="@+id/text_performance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- 3° rigo: Riferimento Banca / Conto -->
+                <TextView
+                    android:id="@+id/text_banca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="#888888"
+                    android:textSize="13sp" />
+
+                <!-- Nuovo rigo: Investito totale (solo per PAC) -->
+                <TextView
+                    android:id="@+id/text_investito_totale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="#BBBBBB"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <!-- Rigo Scadenza -->
+                <TextView
+                    android:id="@+id/text_scadenza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF" />
+
+                <!-- Rigo Cedole -->
+                <LinearLayout
+                    android:id="@+id/layout_cedola_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_data_cedola"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF" />
+                    <TextView
+                        android:id="@+id/text_importo_cedola"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#4CAF50" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#333333" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:id="@+id/text_codice_vincolo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="#888888"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/text_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#F44336"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btn_view"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Visualizza"
+                        android:src="@drawable/ic_visibility_outline"
+                        app:tint="#FFFFFF" />
+
+                    <ImageButton
+                        android:id="@+id/btn_edit"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Modifica"
+                        android:src="@drawable/ic_edit_outline"
+                        app:tint="#FFFFFF" />
+
+                    <ImageButton
+                        android:id="@+id/btn_duplicate"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Duplica"
+                        android:src="@drawable/ic_content_copy"
+                        app:tint="#FFFFFF" />
+
+                    <ImageButton
+                        android:id="@+id/btn_delete"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Elimina"
+                        android:src="@drawable/ic_delete_outline"
+                        app:tint="#F44336" />
+
+                    <ImageButton
+                        android:id="@+id/btn_hard_delete"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Elimina Definitivamente"
+                        android:src="@drawable/ic_delete_outline"
+                        android:visibility="gone"
+                        app:tint="#FF0000" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

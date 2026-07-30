@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_bank_selector"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Seleziona Banca"
+            android:visibility="gone"
+            app:boxBackgroundColor="@color/input_background"
+            app:errorEnabled="true">
+            <AutoCompleteTextView
+                android:id="@+id/spinner_bank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_account_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome Conto"
+            app:boxBackgroundColor="@color/input_background"
+            app:errorEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_account_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_category"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Tipologia"
+            app:boxBackgroundColor="@color/input_background"
+            app:errorEnabled="true">
+            <AutoCompleteTextView
+                android:id="@+id/spinner_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_rendicontazione_account"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Frequenza Rendicontazione"
+            android:visibility="gone"
+            app:boxBackgroundColor="@color/input_background"
+            app:errorEnabled="true">
+            <AutoCompleteTextView
+                android:id="@+id/spinner_rendicontazione_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_bollo_account"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Bollo Statale a carico Banca?"
+            android:visibility="gone"
+            app:boxBackgroundColor="@color/input_background"
+            app:errorEnabled="true">
+            <AutoCompleteTextView
+                android:id="@+id/spinner_bollo_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Container per campi dinamici (Data e Saldo/Valore) -->
+        <LinearLayout
+            android:id="@+id/container_dynamic_fields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_date_account"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Data"
+                app:boxBackgroundColor="@color/input_background"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_date_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="#FFFFFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_saldo_libero"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Saldo Iniziale"
+                app:boxBackgroundColor="@color/input_background"
+                app:errorEnabled="true"
+                app:suffixText="€">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_saldo_libero"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:digits="0123456789,."
+                    android:textColor="#FFFFFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_tasso_account"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Tasso d'Interesse"
+                android:visibility="gone"
+                app:boxBackgroundColor="@color/input_background"
+                app:suffixText="%"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_tasso_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:digits="0123456789,."
+                    android:textColor="#FFFFFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_periodo_interessi_account"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Periodicità Interessi (Mesi)"
+                android:visibility="gone"
+                app:boxBackgroundColor="@color/input_background"
+                app:helperText="Es. 1 per mensile, 3 per trimestrale, 12 per annuale"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_periodo_interessi_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="#FFFFFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_note_account"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Note Asset"
+                android:visibility="gone"
+                app:boxBackgroundColor="@color/input_background"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_note_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:gravity="top|start"
+                    android:minLines="2"
+                    android:textColor="#FFFFFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_save_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="SALVA CONTO"
+            android:backgroundTint="@color/purple_products"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</ScrollView>

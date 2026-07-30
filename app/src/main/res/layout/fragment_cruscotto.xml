@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Finestra 1: Totale Patrimonio -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_totale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_totale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Patrimonio"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_totale"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_totale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="24dp"
+                    android:paddingBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="bottom">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Totale"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="12dp" />
+                        <TextView
+                            android:id="@+id/text_totale_capitale"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="€ 0,00"
+                            android:textColor="#4CAF50"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            android:gravity="end" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="di cui:"
+                        android:textColor="#888888"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Mobiliare -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Mobiliare"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/text_patrimonio_mobiliare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Dettaglio Mobiliare (Rientrato) -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="di cui:"
+                        android:textColor="#888888"
+                        android:textSize="13sp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="2dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Vincolati"
+                            android:textColor="#BBBBBB"
+                            android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/text_mobiliare_vincolato"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#BBBBBB"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="2dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Liberi"
+                            android:textColor="#BBBBBB"
+                            android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/text_mobiliare_libero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#BBBBBB"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <!-- Immobiliare -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Immobiliare"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/text_patrimonio_immobiliare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Altro -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="4dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Altro (Beni di valore)"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/text_patrimonio_altro"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 2: Cedole in Arrivo -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_cedole_prossime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_cedole_prossime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cedole in arrivo"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_cedole_prossime"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_cedole_prossime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/container_cedole_dashboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 3: Strumenti in Scadenza -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_vincoli_scadenza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_vincoli_scadenza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Strumenti in scadenza"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_vincoli_scadenza"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_vincoli_scadenza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/container_vincoli_scadenza_dashboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 4: Distribuzione per Banca (Grafico) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_grafico_banca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_grafico_banca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distribuzione per Banca"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_grafico_banca"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_grafico_banca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart_banca"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+
+                    <!-- Legenda Personalizzata Tabellare -->
+                    <LinearLayout
+                        android:id="@+id/legend_banca_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 5: Distribuzione per Tipo di Conto (Grafico)-->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_grafico_tipo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_grafico_tipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distribuzione per Tipo di Conto"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_grafico_tipo"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_grafico_tipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart_tipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+
+                    <!-- Legenda Personalizzata Tabellare per Tipo -->
+                    <LinearLayout
+                        android:id="@+id/legend_tipo_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 6: Distribuzione per Durata Strumento (Grafico)-->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_grafico_durata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_grafico_durata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distribuzione per durata Strumento"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_grafico_durata"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_grafico_durata"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/bar_chart_durata"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 7: Distribuzione per Strumento -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_grafico_nomi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_grafico_nomi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distribuzione per Strumento"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_grafico_nomi"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_grafico_nomi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:visibility="gone">
+
+                    <!-- Tabella per Importo -->
+                    <LinearLayout
+                        android:id="@+id/legend_importo_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- Finestra 8: Distribuzione per Asset (Grafico Macro) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_grafico_asset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_grafico_asset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distribuzione per Asset"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_grafico_asset"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_grafico_asset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:visibility="gone">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart_asset"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+
+                    <LinearLayout
+                        android:id="@+id/legend_asset_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Finestra 9: Distribuzione Investimenti (Grafico Dettaglio) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_grafico_investimenti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_grafico_investimenti"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distribuzione Investimenti"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_grafico_investimenti"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_grafico_investimenti"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:visibility="gone">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart_investimenti"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+
+                    <LinearLayout
+                        android:id="@+id/legend_investimenti_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

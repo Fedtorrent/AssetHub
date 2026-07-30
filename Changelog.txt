@@ -1,0 +1,18 @@
+VERSIONE 1.2 (da rilasciare)
+• Tema Scuro Predefinito: Forzata la modalità scura per l'intera app per garantire la massima leggibilità di tutti i campi, indipendentemente dalle impostazioni di sistema.
+
+VERSIONE 1.1 
+• Link Utili Dinamici: Ora puoi aggiungere, personalizzare ed eliminare i tuoi collegamenti finanziari preferiti direttamente dal database. 
+• Protezione Privacy Background: Nuova opzione per oscurare l'anteprima dell'app nell'elenco delle app recenti e richiedere lo sblocco al rientro. 
+• Espansione Asset Personali: Aggiunte nuove categorie per mappare con precisione Contanti, Veicoli, Gioielli e altri oggetti di valore. 
+• Ordinamento Prioritario: La banca "Asset Personali" è ora ancorata stabilmente in cima alla lista per un accesso immediato. 
+• Importazione Robusta: Migliorato il sistema di ripristino backup per gestire correttamente file modificati manualmente (es. con Excel). 
+• Test Avvisi Istantaneo: Ottimizzato il pulsante di test nelle impostazioni per fornire un feedback immediato e verificare la corretta configurazione del sistema. 
+• Miglioramenti Grafici: Perfezionato l'ordine delle voci nel Cruscotto e aggiornate le icone ufficiali per i link finanziari.
+
+VERSIONE 1.0 
+• Rilascio iniziale dell'applicazione. 
+• Gestione completa di Banche, Conti e Strumenti. 
+• Cruscotto riepilogativo con grafici interattivi. 
+• Calcolo automatico interessi, bolli e valorizzazione PAC. 
+• Sistema di sicurezza tramite PIN e Biometria.

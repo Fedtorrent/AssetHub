@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Input Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#1E1E1E"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Capitale -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_capitale"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Capitale da investire (€)"
+                        android:textColorHint="#888888"
+                        app:boxBackgroundColor="@color/input_background"
+                        app:boxStrokeColor="@color/yellow_utility"
+                        app:hintTextColor="@color/yellow_utility"
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_capitale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:digits="0123456789,."
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Tasso -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_tasso"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:hint="Tasso Annuo Lordo (%)"
+                        android:textColorHint="#888888"
+                        app:boxBackgroundColor="@color/input_background"
+                        app:boxStrokeColor="@color/yellow_utility"
+                        app:hintTextColor="@color/yellow_utility"
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_tasso"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:digits="0123456789,."
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Durata -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_durata"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:hint="Durata (mesi)"
+                        android:textColorHint="#888888"
+                        app:boxBackgroundColor="@color/input_background"
+                        app:boxStrokeColor="@color/yellow_utility"
+                        app:hintTextColor="@color/yellow_utility"
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_durata"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Tassazione -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Tassazione"
+                        android:textColor="#BBBBBB"
+                        android:textSize="12sp" />
+
+                    <RadioGroup
+                        android:id="@+id/radio_group_tassazione"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio_26"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="26,00%"
+                            android:textColor="#FFFFFF"
+                            app:buttonTint="@color/yellow_utility" />
+
+                        <RadioButton
+                            android:id="@+id/radio_12"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="12,50%"
+                            android:textColor="#FFFFFF"
+                            app:buttonTint="@color/yellow_utility" />
+                    </RadioGroup>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_calcola"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/btn_calcola"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="@color/yellow_utility"
+                        app:cornerRadius="8dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Results Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="#1E1E1E"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Risultati stimati"
+                        android:textColor="@color/yellow_utility"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#333333" />
+
+                    <!-- Lordo -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Interesse Lordo"
+                            android:textColor="#FFFFFF" />
+                        <TextView
+                            android:id="@+id/text_risultato_lordo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Tasse -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Ritenuta Fiscale"
+                            android:textColor="#F44336" />
+                        <TextView
+                            android:id="@+id/text_risultato_tasse"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="- € 0,00"
+                            android:textColor="#F44336"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:background="#333333" />
+
+                    <!-- Netto -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="GUADAGNO NETTO"
+                            android:textColor="#4CAF50"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/text_risultato_netto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="€ 0,00"
+                            android:textColor="#4CAF50"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Tasso Netto % -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Tasso Annuo Netto"
+                            android:textColor="#BBBBBB"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/text_risultato_tasso_netto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0,00%"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Nota: Il calcolo è basato su mesi commerciali (base 360). Per i Conti Deposito reali potrebbero esserci lievi differenze basate sui giorni esatti dell'anno."
+                android:textColor="#666666"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

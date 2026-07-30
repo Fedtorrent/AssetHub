@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_cruscotto">
+
+    <fragment
+        android:id="@+id/navigation_cruscotto"
+        android:name="com.fulvio.assethub.CruscottoFragment"
+        android:label="@string/title_cruscotto"
+        tools:layout="@layout/fragment_cruscotto" />
+
+    <fragment
+        android:id="@+id/navigation_conti"
+        android:name="com.fulvio.assethub.ContiFragment"
+        android:label="@string/title_lista_banche"
+        tools:layout="@layout/fragment_conti">
+        <action
+            android:id="@+id/action_conti_to_add_bank"
+            app:destination="@id/navigation_add_bank" />
+        <action
+            android:id="@+id/action_conti_to_lista_prodotti_detail"
+            app:destination="@id/navigation_lista_prodotti_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_bank"
+        android:name="com.fulvio.assethub.AddBankFragment"
+        android:label="@string/title_nuova_banca"
+        tools:layout="@layout/fragment_add_bank">
+        <argument
+            android:name="bankId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_lista_prodotti"
+        android:name="com.fulvio.assethub.ListaProdottiFragment"
+        android:label="@string/title_lista_conti"
+        tools:layout="@layout/fragment_lista_prodotti">
+        <argument
+            android:name="bankId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_lista_prodotti_to_add_product"
+            app:destination="@id/navigation_add_product" />
+        <action
+            android:id="@+id/action_lista_prodotti_to_storico_asset"
+            app:destination="@id/navigation_storico_asset" />
+    </fragment>
+
+    <!-- Destinazione Dettaglio per Conti (per avere la freccia indietro) -->
+    <fragment
+        android:id="@+id/navigation_lista_prodotti_detail"
+        android:name="com.fulvio.assethub.ListaProdottiFragment"
+        android:label="@string/title_lista_conti"
+        tools:layout="@layout/fragment_lista_prodotti">
+        <argument
+            android:name="bankId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="customColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_lista_prodotti_to_add_product"
+            app:destination="@id/navigation_add_product" />
+        <action
+            android:id="@+id/action_lista_prodotti_to_storico_asset"
+            app:destination="@id/navigation_storico_asset" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_storico_asset"
+        android:name="com.fulvio.assethub.StoricoAssetFragment"
+        android:label="Storico"
+        tools:layout="@layout/fragment_storico_saldi">
+        <argument
+            android:name="accountId"
+            app:argType="long" />
+        <argument
+            android:name="assetName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="customColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_storico_to_add_vincolo"
+            app:destination="@id/navigation_add_vincolo" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_product"
+        android:name="com.fulvio.assethub.AddAccountFragment"
+        android:label="@string/title_nuovo_conto"
+        tools:layout="@layout/fragment_add_account">
+        <argument
+            android:name="bankId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="accountId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="customColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_lista_vincoli"
+        android:name="com.fulvio.assethub.ListaVincoliFragment"
+        android:label="@string/title_lista_vincoli"
+        tools:layout="@layout/fragment_lista_vincoli">
+        <argument
+            android:name="accountId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_lista_vincoli_to_add_vincolo"
+            app:destination="@id/navigation_add_vincolo" />
+        <action
+            android:id="@+id/action_lista_vincoli_to_dettaglio_vincolo"
+            app:destination="@id/navigation_dettaglio_vincolo" />
+        <action
+            android:id="@+id/action_lista_vincoli_to_storico_asset"
+            app:destination="@id/navigation_storico_asset" />
+    </fragment>
+
+    <!-- Destinazione Dettaglio per Strumenti (per avere la freccia indietro) -->
+    <fragment
+        android:id="@+id/navigation_lista_vincoli_detail"
+        android:name="com.fulvio.assethub.ListaVincoliFragment"
+        android:label="@string/title_lista_vincoli"
+        tools:layout="@layout/fragment_lista_vincoli">
+        <argument
+            android:name="accountId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="customColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_lista_vincoli_to_add_vincolo"
+            app:destination="@id/navigation_add_vincolo" />
+        <action
+            android:id="@+id/action_lista_vincoli_to_dettaglio_vincolo"
+            app:destination="@id/navigation_dettaglio_vincolo" />
+        <action
+            android:id="@+id/action_lista_vincoli_to_storico_asset"
+            app:destination="@id/navigation_storico_asset" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dettaglio_vincolo"
+        android:name="com.fulvio.assethub.DettaglioVincoloFragment"
+        android:label="Dettaglio Strumento"
+        tools:layout="@layout/fragment_dettaglio_vincolo">
+        <argument
+            android:name="vincoloId"
+            app:argType="long" />
+        <argument
+            android:name="customColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_vincolo"
+        android:name="com.fulvio.assethub.AddVincoloFragment"
+        android:label="Aggiungi Strumento"
+        tools:layout="@layout/fragment_add_vincolo">
+        <argument
+            android:name="vincoloId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="isDuplicate"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="accountId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="assetName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="customColor"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_impostazioni"
+        android:name="com.fulvio.assethub.ImpostazioniFragment"
+        android:label="Impostazioni"
+        tools:layout="@layout/fragment_impostazioni">
+        <action
+            android:id="@+id/action_navigation_impostazioni_to_infoAppFragment"
+            app:destination="@id/infoAppFragment" />
+        <action
+            android:id="@+id/action_impostazioni_to_changelog"
+            app:destination="@id/navigation_changelog" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_changelog"
+        android:name="com.fulvio.assethub.ChangelogFragment"
+        android:label="Log Aggiornamenti"
+        tools:layout="@layout/fragment_changelog" />
+
+    <fragment
+        android:id="@+id/navigation_utility"
+        android:name="com.fulvio.assethub.UtilityFragment"
+        android:label="@string/title_utility"
+        tools:layout="@layout/fragment_utility">
+        <action
+            android:id="@+id/action_utility_to_calcolatrice"
+            app:destination="@id/navigation_calcolatrice_interessi" />
+        <action
+            android:id="@+id/action_utility_to_salto_staffa"
+            app:destination="@id/navigation_salto_staffa" />
+        <action
+            android:id="@+id/action_utility_to_links_utili"
+            app:destination="@id/navigation_links_utili" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_links_utili"
+        android:name="com.fulvio.assethub.LinksUtiliFragment"
+        android:label="Link Utili"
+        tools:layout="@layout/fragment_links_utili">
+        <action
+            android:id="@+id/action_links_utili_to_add_link"
+            app:destination="@id/navigation_add_link_utile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_link_utile"
+        android:name="com.fulvio.assethub.AddLinkFragment"
+        android:label="Aggiungi Link"
+        tools:layout="@layout/fragment_add_link" />
+
+    <fragment
+        android:id="@+id/navigation_salto_staffa"
+        android:name="com.fulvio.assethub.SaltoStaffaFragment"
+        android:label="Salto della Staffa"
+        tools:layout="@layout/fragment_salto_staffa" />
+
+    <fragment
+        android:id="@+id/navigation_calcolatrice_interessi"
+        android:name="com.fulvio.assethub.CalcolatriceInteressiFragment"
+        android:label="@string/title_calcolatrice"
+        tools:layout="@layout/fragment_calcolatrice_interessi" />
+
+    <fragment
+        android:id="@+id/infoAppFragment"
+        android:name="com.fulvio.assethub.InfoAppFragment"
+        android:label="Info App"
+        tools:layout="@layout/fragment_info_app" />
+</navigation>

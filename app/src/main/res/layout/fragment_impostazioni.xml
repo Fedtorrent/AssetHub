@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- 0° Sezione: DATI E VISUALIZZAZIONE -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_dati_vis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dati e visualizzazione"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_dati_vis"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_dati_vis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="VISUAL. ELEMENTI ELIMINATI"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_show_deleted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="VISUAL. ELEMENTI SCADUTI"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_show_expired"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="VISUAL. STRUMENTI NON ATTIVI"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_show_not_active"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_mesi_cedole"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="VISUAL. CEDOLE IN ARRIVO"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_today"
+                        app:iconTint="#FFFFFF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_mesi_vincoli"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="VISUAL. STRUM. IN SCAD."
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_recent_history"
+                        app:iconTint="#FFFFFF" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 0.1° Sezione: NOTIFICHE -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_notifiche"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Notifiche"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_notifiche"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_notifiche"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ATTIVA NOTIFICHE CEDOLE"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_notify_cedole"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ATTIVA NOTIFICHE SCADENZE"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_notify_scadenze"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_test_notifiche"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TEST INVIO NOTIFICHE (ADESSO)"
+                        android:textColor="@color/amber_settings"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_dialog_email"
+                        app:iconTint="@color/amber_settings" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 1° Sezione: BACKUP E RIPRISTINO -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_backup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Backup e ripristino"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_backup"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_backup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_esporta_backup"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ESPORTA BACKUP"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_save"
+                        app:iconTint="#FFFFFF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_importa_backup"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="IMPORTA BACKUP"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_upload"
+                        app:iconTint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="ATTENZIONE: L'importazione di un file CSV eliminerà tutti i dati attualmente presenti nel database."
+                        android:textColor="#FFEB3B"
+                        android:textSize="12sp"
+                        android:paddingHorizontal="12dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2° Sezione: SICUREZZA -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_sicurezza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sicurezza"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_sicurezza"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_sicurezza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ACCESSO TRAMITE PIN"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_pin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ACCESSO TRAMITE BIOMETRIA"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_biometria"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="PROTEZIONE BACKGROUND"
+                            android:textColor="#FFFFFF" />
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_background_protection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_modifica_pin"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MODIFICA PIN"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_edit"
+                        app:iconTint="#FFFFFF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_elimina_pin"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ELIMINA PIN"
+                        android:textColor="#F44336"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_delete"
+                        app:iconTint="#F44336" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 3° Sezione: INFO E GUIDA -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Info e guida"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_info"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_guida"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="GUIDA APP E BENVENUTO"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_help"
+                        app:iconTint="#FFFFFF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_changelog"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="LOG AGGIORNAMENTI"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_recent_history"
+                        app:iconTint="#FFFFFF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_info"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="INFO APP"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_info_details"
+                        app:iconTint="#FFFFFF" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_dati_prova"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="CARICA DATI DI PROVA"
+                        android:textColor="#FFFFFF"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_manage"
+                        app:iconTint="#FFFFFF" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 4° Sezione: MANUTENZIONE -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_manutenzione"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Manutenzione"
+                        android:textColor="@color/azure_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_arrow_manutenzione"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#FFFFFF" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/content_manutenzione"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="16dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_reset_totale"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="RESET TOTALE (ELIMINA TUTTI I DATI)"
+                        android:textColor="#F44336"
+                        android:gravity="start"
+                        app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                        app:iconTint="#F44336" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

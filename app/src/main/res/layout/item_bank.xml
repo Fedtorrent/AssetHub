@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#212121"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Banda Colorata a tutta altezza -->
+        <View
+            android:id="@+id/view_color_indicator"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue_accounts" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Area Contenuto Principale -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- 1° rigo: Nome Banca e Saldo -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_bank_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/text_total_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#4CAF50"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- 2° rigo: Numero Conti (Bianco) -->
+                <TextView
+                    android:id="@+id/text_accounts_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <!-- 3° rigo: Numero Strumenti (Bianco) -->
+                <TextView
+                    android:id="@+id/text_instruments_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Divisore e Barra Azioni -->
+            <View
+                android:id="@+id/divider_actions"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#333333" />
+
+            <LinearLayout
+                android:id="@+id/layout_actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp">
+
+                <ImageButton
+                    android:id="@+id/btn_view"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Visualizza"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_visibility_outline"
+                    app:tint="#FFFFFF" />
+
+                <ImageButton
+                    android:id="@+id/btn_edit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Modifica"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_edit_outline"
+                    app:tint="#FFFFFF" />
+
+                <ImageButton
+                    android:id="@+id/btn_delete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Elimina"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_delete_outline"
+                    app:tint="#F44336" />
+
+                <ImageButton
+                    android:id="@+id/btn_hard_delete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Elimina Definitivamente"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_delete_outline"
+                    android:visibility="gone"
+                    app:tint="#FF0000" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

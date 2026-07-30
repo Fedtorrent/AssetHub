@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.IMieiVincoli" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/azure_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/azure_primary_container</item>
+    </style>
+
+    <style name="Theme.IMieiVincoli" parent="Base.Theme.IMieiVincoli" />
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemActiveIndicatorStyle">@style/Widget.App.Indicator</item>
+    </style>
+
+    <style name="Widget.App.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#33FFFFFF</item>
+        <item name="android:width">52dp</item>
+        <item name="android:height">32dp</item>
+    </style>
+</resources>

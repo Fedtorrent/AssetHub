@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="azure_primary">#448AFF</color>
+    <color name="teal_list">#009688</color>
+    <color name="blue_accounts">#908435</color>
+    <color name="purple_products">#9932CC</color>
+    <color name="amber_settings">#FFB300</color>
+    <color name="yellow_utility">#F07030</color>
+    <color name="azure_primary_container">#D1E9FF</color>
+    <color name="input_background">#2A2A2A</color>
+</resources>

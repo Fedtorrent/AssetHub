@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_cruscotto"
+        android:icon="@drawable/ic_dashboard_gauge"
+        android:title="@string/title_cruscotto" />
+    <item
+        android:id="@+id/navigation_conti"
+        android:icon="@drawable/ic_bank"
+        android:title="@string/title_lista_banche" />
+    <item
+        android:id="@+id/navigation_lista_prodotti"
+        android:icon="@drawable/ic_wallet"
+        android:title="@string/title_lista_conti" />
+    <item
+        android:id="@+id/navigation_lista_vincoli"
+        android:icon="@drawable/ic_list"
+        android:title="@string/title_lista_vincoli" />
+    <item
+        android:id="@+id/navigation_utility"
+        android:icon="@drawable/ic_utility"
+        android:title="@string/title_utility" />
+    <item
+        android:id="@+id/navigation_impostazioni"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/title_setup" />
+</menu>

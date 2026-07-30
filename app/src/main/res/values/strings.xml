@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Asset Hub</string>
+    <string name="title_cruscotto">Cruscotto</string>
+    <string name="title_lista_banche">Banche</string>
+    <string name="title_nuova_banca">Nuova Banca</string>
+    <string name="title_lista_conti">Conti</string>
+    <string name="title_nuovo_conto">Nuovo Conto</string>
+    <string name="title_lista_vincoli">Strumenti</string>
+    <string name="title_utility">Utility</string>
+    <string name="title_calcolatrice">Calcolatrice Interessi</string>
+    <string name="title_setup">Setup</string>
+    <string name="btn_calcola">CALCOLA</string>
+</resources>
