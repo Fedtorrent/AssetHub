@@ -30,7 +30,7 @@ class InfoAppFragment : Fragment() {
         binding.textAppName.text = Html.fromHtml("<font color='#FFFFFF'>ASSET</font> <font color='#448AFF'>HUB</font>", Html.FROM_HTML_MODE_LEGACY)
 
         binding.layoutDeveloperSite.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://fedtorrent.github.io/lemieapp.github.io/"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://fedtorrent.github.io/LeMieApp.github.io/"))
             startActivity(intent)
         }
     }
