@@ -1,5 +1,9 @@
 # AssetHub
 
+<p align="center">
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_1_Icona.png" width="220" alt="Logo" />
+</p>  
+
 **AssetHub** è un'applicazione Android progettata per monitorare il proprio **Patrimonio** e i propri **Investimenti** in modo semplice, efficace e, soprattutto, sicuro.
 
 ## 🔒 Privacy First
@@ -27,12 +31,12 @@ L'app presenta un'interfaccia moderna e intuitiva basata sui principi del Materi
 *(L'icona e gli screenshot dell'applicazione sono disponibili nella cartella `images/` del progetto)*
 
 <p align="center">
-  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_0_Icona.png" width="220" alt="Screenshot 1" />
-  <img src="public/LMS_2_Catal.Farm.jpeg" width="220" alt="Screenshot 2" />
-  <img src="public/LMS_3_Stat.jpeg" width="220" alt="Screenshot 3" />
-  <img src="public/LMS_4_Pressione.jpeg" width="220" alt="Screenshot 4" />
-  <img src="public/LMS_5_DB_Esami.jpeg" width="220" alt="Screenshot 5" />
-  <img src="public/LMS_6_Menu.jpeg" width="220" alt="Screenshot 6" />
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_1_Icona.png" width="220" alt="Screenshot 1" />
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_2_Icona.png" width="220" alt="Screenshot 2" />
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_3_Icona.png" width="220" alt="Screenshot 3" />
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_4_Icona.png" width="220" alt="Screenshot 4" />
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_5_Icona.png" width="220" alt="Screenshot 5" />
+  <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_6_Icona.png" width="220" alt="Screenshot 6" />
 </p>
 
 ---
