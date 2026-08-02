@@ -40,6 +40,7 @@ class CruscottoFragment : Fragment() {
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.ITALY)
 
     private var isTotaleExpanded = false
+    private var isAndamentoExpanded = false
     private var isCedoleExpanded = false
     private var isVincoliScadenzaExpanded = false
     private var isGraficoNomiExpanded = false
@@ -94,6 +95,7 @@ class CruscottoFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("dashboard_prefs", Context.MODE_PRIVATE)
 
         isTotaleExpanded = prefs.getBoolean("totale_expanded", false)
+        isAndamentoExpanded = prefs.getBoolean("andamento_expanded", false)
         isCedoleExpanded = prefs.getBoolean("cedole_expanded", false)
         isVincoliScadenzaExpanded = prefs.getBoolean("vincoli_scadenza_expanded", false)
         isGraficoNomiExpanded = prefs.getBoolean("grafico_nomi_expanded", false)
@@ -104,6 +106,7 @@ class CruscottoFragment : Fragment() {
         isGraficoInvestimentiExpanded = prefs.getBoolean("grafico_investimenti_expanded", false)
 
         updateCollapsibleView(binding.contentTotale, binding.imgArrowTotale, isTotaleExpanded)
+        updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, isAndamentoExpanded)
         updateCollapsibleView(binding.contentCedoleProssime, binding.imgArrowCedoleProssime, isCedoleExpanded)
         updateCollapsibleView(binding.contentVincoliScadenza, binding.imgArrowVincoliScadenza, isVincoliScadenzaExpanded)
         updateCollapsibleView(binding.contentGraficoNomi, binding.imgArrowGraficoNomi, isGraficoNomiExpanded)
@@ -117,6 +120,11 @@ class CruscottoFragment : Fragment() {
             isTotaleExpanded = !isTotaleExpanded
             updateCollapsibleView(binding.contentTotale, binding.imgArrowTotale, isTotaleExpanded)
             prefs.edit().putBoolean("totale_expanded", isTotaleExpanded).apply()
+        }
+        binding.headerAndamento.setOnClickListener {
+            isAndamentoExpanded = !isAndamentoExpanded
+            updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, isAndamentoExpanded)
+            prefs.edit().putBoolean("andamento_expanded", isAndamentoExpanded).apply()
         }
         binding.headerCedoleProssime.setOnClickListener {
             isCedoleExpanded = !isCedoleExpanded
@@ -162,6 +170,7 @@ class CruscottoFragment : Fragment() {
 
     private fun toggleAll(expand: Boolean, prefs: android.content.SharedPreferences) {
         isTotaleExpanded = expand
+        isAndamentoExpanded = expand
         isCedoleExpanded = expand
         isVincoliScadenzaExpanded = expand
         isGraficoNomiExpanded = expand
@@ -172,6 +181,7 @@ class CruscottoFragment : Fragment() {
         isGraficoInvestimentiExpanded = expand
 
         updateCollapsibleView(binding.contentTotale, binding.imgArrowTotale, expand)
+        updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, expand)
         updateCollapsibleView(binding.contentCedoleProssime, binding.imgArrowCedoleProssime, expand)
         updateCollapsibleView(binding.contentVincoliScadenza, binding.imgArrowVincoliScadenza, expand)
         updateCollapsibleView(binding.contentGraficoNomi, binding.imgArrowGraficoNomi, expand)
@@ -183,6 +193,7 @@ class CruscottoFragment : Fragment() {
 
         prefs.edit().apply {
             putBoolean("totale_expanded", expand)
+            putBoolean("andamento_expanded", expand)
             putBoolean("cedole_expanded", expand)
             putBoolean("vincoli_scadenza_expanded", expand)
             putBoolean("grafico_nomi_expanded", expand)
@@ -211,8 +222,9 @@ class CruscottoFragment : Fragment() {
         var totaleMobiliareLibero = 0.0
         var totaleAltro = 0.0
         
-        // Tutti gli strumenti per le liste (cedole/scadenze)
+        // Tutti gli strumenti per le liste (cedole/scadenze) e grafici andamento
         val allInstrumentsForLists = mutableListOf<VincoloWithAccount>()
+        val allInstrumentsWithCategory = mutableListOf<InstrumentHistoryItem>()
 
         activeBanks.forEach { bankWithAccs ->
             bankWithAccs.accounts.filter { !it.account.isDeleted }.forEach { wrapper ->
@@ -241,6 +253,7 @@ class CruscottoFragment : Fragment() {
                 // Popoliamo la lista piatta per Cedole e Scadenze
                 activeVincoli.forEach { 
                     allInstrumentsForLists.add(VincoloWithAccount(it, wrapper.account))
+                    allInstrumentsWithCategory.add(InstrumentHistoryItem(it, systemType, wrapper.account.id))
                 }
             }
         }
@@ -255,6 +268,7 @@ class CruscottoFragment : Fragment() {
         binding.textMobiliareVincolato.text = currencyFormatter.format(totaleMobiliareVincolato)
         binding.textMobiliareLibero.text = currencyFormatter.format(totaleMobiliareLibero)
 
+        setupAndamentoCharts(allInstrumentsWithCategory)
         setupProssimeCedole(allInstrumentsForLists)
         setupVincoliInScadenza(allInstrumentsForLists)
         setupPatrimonioPerBancaChart(activeBanks)
@@ -393,6 +407,158 @@ class CruscottoFragment : Fragment() {
         row.addView(txtLabel)
         row.addView(txtValue)
         container.addView(row)
+    }
+
+    private fun setupAndamentoCharts(allInstruments: List<InstrumentHistoryItem>) {
+        val now = System.currentTimeMillis()
+        val points = mutableListOf<Long>()
+        
+        // 1. Punto 0: Oggi
+        points.add(now)
+        
+        // 2. Altri 9 punti: fine dei mesi precedenti
+        val cal = Calendar.getInstance()
+        for (i in 1..9) {
+            cal.add(Calendar.MONTH, -1)
+            val endOfMonth = cal.clone() as Calendar
+            endOfMonth.set(Calendar.DAY_OF_MONTH, endOfMonth.getActualMaximum(Calendar.DAY_OF_MONTH))
+            endOfMonth.set(Calendar.HOUR_OF_DAY, 23)
+            endOfMonth.set(Calendar.MINUTE, 59)
+            endOfMonth.set(Calendar.SECOND, 59)
+            endOfMonth.set(Calendar.MILLISECOND, 999)
+            points.add(endOfMonth.timeInMillis)
+        }
+        
+        // Ordiniamo cronologicamente (dal più vecchio al più recente)
+        val sortedPoints = points.sorted()
+        
+        val entriesTotale = mutableListOf<com.github.mikephil.charting.data.Entry>()
+        val entriesMobiliare = mutableListOf<com.github.mikephil.charting.data.Entry>()
+        val labels = mutableListOf<String>()
+        val df = SimpleDateFormat("dd/MM", Locale.ITALY)
+        val todayStr = df.format(Date(now))
+
+        sortedPoints.forEachIndexed { index, ts ->
+            val snapshot = calculatePortfolioAtTimestamp(allInstruments, ts)
+            entriesTotale.add(com.github.mikephil.charting.data.Entry(index.toFloat(), snapshot.first.toFloat()))
+            entriesMobiliare.add(com.github.mikephil.charting.data.Entry(index.toFloat(), snapshot.second.toFloat()))
+            
+            val dateStr = df.format(Date(ts))
+            labels.add(if (dateStr == todayStr) "Oggi" else dateStr)
+        }
+
+        renderLineChart(binding.lineChartTotale, entriesTotale, labels, 0xFF4CAF50.toInt()) // Verde per totale
+        renderLineChart(binding.lineChartMobiliare, entriesMobiliare, labels, 0xFF448AFF.toInt()) // Azzurro per mobiliare
+    }
+
+    private fun calculatePortfolioAtTimestamp(allInstruments: List<InstrumentHistoryItem>, timestamp: Long): Pair<Double, Double> {
+        var totale = 0.0
+        var mobiliare = 0.0
+
+        // Raggruppiamo per account
+        val groupedByAccount = allInstruments.groupBy { it.accountId }
+
+        groupedByAccount.forEach { entry ->
+            val instruments = entry.value
+            val systemType = instruments.first().systemType
+            
+            // Filtriamo gli strumenti attivi alla data del timestamp
+            val activeAtDate = instruments.filter { item ->
+                val v = item.vincolo
+                val calScadenza = Calendar.getInstance().apply {
+                    timeInMillis = v.dataDecorrenza
+                    add(Calendar.MONTH, v.durataMesi)
+                }
+                val isExpired = v.durataMesi > 0 && calScadenza.timeInMillis < timestamp
+                val isFuture = v.dataDecorrenza > timestamp
+                !isExpired && !isFuture && !v.isDeleted
+            }
+
+            if (activeAtDate.isEmpty()) return@forEach
+
+            val balance: Double
+            if (systemType == Category.TYPE_CORRENTE || systemType == Category.TYPE_DEPOSITO_LIBERO || systemType == Category.TYPE_PENSIONE || 
+                systemType == Category.TYPE_IMMOBILI || systemType == Category.TYPE_CONTANTI || systemType == Category.TYPE_VEICOLI || 
+                systemType == Category.TYPE_GIOIELLI || systemType == Category.TYPE_OGGETTI) {
+                // Ultimo valore inserito nello storico alla data
+                balance = activeAtDate.maxBy { it.vincolo.dataDecorrenza }.vincolo.importo
+            } else {
+                // Deposito e Titoli: raggruppamento per nome
+                val historyGroups = activeAtDate.map { it.vincolo }.filter { InstrumentUtils.isHistoryBased(it) }
+                    .groupBy { it.nome }
+                    .mapValues { entryInner -> 
+                        val items = entryInner.value
+                        if (InstrumentUtils.isIncremental("Conto Titoli", items.first().strumentoDettaglio)) {
+                            val totalQuotes = items.sumOf { it.numeroQuote }
+                            val lastPrice = items.maxBy { it.dataDecorrenza }.prezzoAcquisto
+                            totalQuotes * lastPrice
+                        } else {
+                            items.maxBy { it.dataDecorrenza }.importo
+                        }
+                    }
+                val singleTotal = activeAtDate.map { it.vincolo }.filter { !InstrumentUtils.isHistoryBased(it) }.sumOf { it.importo }
+                balance = historyGroups.values.sum() + singleTotal
+            }
+
+            totale += balance
+            if (systemType != Category.TYPE_IMMOBILI && systemType != Category.TYPE_CONTANTI && 
+                systemType != Category.TYPE_VEICOLI && systemType != Category.TYPE_GIOIELLI && 
+                systemType != Category.TYPE_OGGETTI) {
+                mobiliare += balance
+            }
+        }
+        return Pair(totale, mobiliare)
+    }
+
+    private fun renderLineChart(chart: com.github.mikephil.charting.charts.LineChart, entries: List<com.github.mikephil.charting.data.Entry>, labels: List<String>, colorRes: Int) {
+        val dataSet = com.github.mikephil.charting.data.LineDataSet(entries, "")
+        dataSet.apply {
+            color = colorRes
+            setCircleColor(colorRes)
+            lineWidth = 2f
+            circleRadius = 3f
+            setDrawCircleHole(false)
+            setDrawValues(false)
+            setDrawFilled(true)
+            fillColor = colorRes
+            fillAlpha = 30
+            mode = com.github.mikephil.charting.data.LineDataSet.Mode.CUBIC_BEZIER
+        }
+
+        chart.apply {
+            data = com.github.mikephil.charting.data.LineData(dataSet)
+            description.isEnabled = false
+            legend.isEnabled = false
+            setScaleEnabled(false)
+            setTouchEnabled(true)
+            
+            xAxis.apply {
+                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                textColor = 0xFFBBBBBB.toInt()
+                setDrawGridLines(false)
+                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return labels.getOrNull(value.toInt()) ?: ""
+                    }
+                }
+                granularity = 1f
+                setLabelCount(labels.size)
+            }
+            
+            axisLeft.apply {
+                textColor = 0xFFBBBBBB.toInt()
+                setDrawGridLines(true)
+                gridColor = 0x22FFFFFF
+                valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return if (value >= 1000) "${(value / 1000).toInt()}k" else value.toInt().toString()
+                    }
+                }
+            }
+            axisRight.isEnabled = false
+            animateX(800)
+            invalidate()
+        }
     }
 
     private fun setupPieChart(vincoli: List<Vincolo>) {
@@ -732,3 +898,5 @@ class CruscottoFragment : Fragment() {
         _binding = null
     }
 }
+
+data class InstrumentHistoryItem(val vincolo: Vincolo, val systemType: String, val accountId: Long)
