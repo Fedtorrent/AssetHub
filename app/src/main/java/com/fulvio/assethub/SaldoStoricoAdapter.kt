@@ -61,7 +61,8 @@ class SaldoStoricoAdapter(
             // 3° riga: Mostriamo sempre il totale se è un PAC o CC
             binding.layoutInvestedTotal.visibility = View.VISIBLE
 
-            if (item.tassoVincolo > 0) {
+            val isIncremental = InstrumentUtils.isIncremental(item.tipo, item.strumentoDettaglio)
+            if (item.tassoVincolo > 0 && !isIncremental) {
                 binding.textTasso.visibility = View.VISIBLE
                 binding.textTasso.text = "Tasso: ${item.tassoVincolo}%"
             } else {

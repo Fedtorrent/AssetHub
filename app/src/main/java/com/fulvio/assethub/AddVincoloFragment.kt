@@ -517,7 +517,12 @@ class AddVincoloFragment : Fragment() {
                 val inputTassoStr = binding.editTassoVincolo.text.toString().trim().replace(',', '.')
                 var finalTasso: Double
                 
-                if (inputTassoStr.isEmpty() && (vincoloId == -1L || isDuplicate) && lastEntryAnyName != null) {
+                if (isIncremental) {
+                    // I PAC/ETF non hanno tasso d'interesse, forziamo a 0
+                    finalTasso = 0.0
+                } else if (inputTassoStr.isEmpty() && (vincoloId == -1L || isDuplicate) && lastEntryAnyName != null && 
+                    (tipo == "Conto Corrente" || tipo == "Conto Deposito Libero")) {
+                    // Ereditiamo il tasso solo per CC e CD Libero se non specificato
                     finalTasso = lastEntryAnyName.tassoVincolo
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Tasso ereditato: $finalTasso%", Toast.LENGTH_SHORT).show()
