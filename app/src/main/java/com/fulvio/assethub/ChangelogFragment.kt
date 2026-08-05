@@ -30,6 +30,7 @@ class ChangelogFragment : Fragment() {
             • <b>Trend Patrimonio</b>: Nuova sezione con grafici storici del patrimonio Totale e Mobiliare, con aggiornamento in tempo reale e storico degli ultimi 9 mesi.<br/>
             • <b>Salto della Staffa</b>: Rinominata la funzionalità "Salto della Quaglia" in "Salto della Staffa" con una descrizione più dettagliata e tecnica del funzionamento.<br/>
             • <b>Ottimizzazione Sicurezza</b>: La protezione privacy non viene più attivata erroneamente durante le operazioni di backup e ripristino, rendendo il salvataggio dei dati più fluido.<br/>
+            • <b>Miglioramenti UI</b>: Perfezionata la terminologia nell'elenco movimenti per una maggiore chiarezza tra saldi e investimenti.<br/>
             <br/>
             <font color='#448AFF'><b>VERSIONE 1.2</b></font><br/>
             • <b>Doppia Analisi Asset</b>: Introdotti due nuovi grafici nel Cruscotto per distinguere la distribuzione macro (Asset Class: Liquidità, Immobiliare, ecc.) dal dettaglio specifico degli Investimenti (ETF, Azioni, BTP).<br/>
