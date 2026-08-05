@@ -88,7 +88,8 @@ class VincoloAdapter(
             binding.textImporto.text = currencyFormatter.format(vincolo.importo)
             
             // Gestione riga extra "Investito fino ad ora" per PAC e % Performance
-            if (InstrumentUtils.isIncremental(vincolo.tipo, vincolo.strumentoDettaglio) && vincolo.quotaVariazione != 0.0) {
+            val isIncremental = InstrumentUtils.isIncremental(vincolo.tipo, vincolo.strumentoDettaglio)
+            if (isIncremental && vincolo.quotaVariazione != 0.0) {
                 binding.textInvestitoTotale.visibility = View.VISIBLE
                 binding.textInvestitoTotale.text = "Investito fino ad ora: ${currencyFormatter.format(vincolo.quotaVariazione)}"
                 

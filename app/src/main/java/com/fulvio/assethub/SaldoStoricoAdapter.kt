@@ -61,13 +61,12 @@ class SaldoStoricoAdapter(
             // 3° riga: Mostriamo sempre il totale se è un PAC o CC
             binding.layoutInvestedTotal.visibility = View.VISIBLE
             
-            if (item.tipo == "Conto Corrente" || item.tipo == "Conto Deposito Libero" || item.tipo == "Fondo Pensione") {
-                binding.labelInvested.text = "Saldo: "
-            } else {
-                binding.labelInvested.text = "Investito fino ad ora: "
-            }
-
             val isIncremental = InstrumentUtils.isIncremental(item.tipo, item.strumentoDettaglio)
+            if (isIncremental) {
+                binding.labelInvested.text = "Investito fino ad ora: "
+            } else {
+                binding.labelInvested.text = "Saldo: "
+            }
             if (item.tassoVincolo > 0 && !isIncremental) {
                 binding.textTasso.visibility = View.VISIBLE
                 binding.textTasso.text = "Tasso: ${item.tassoVincolo}%"
