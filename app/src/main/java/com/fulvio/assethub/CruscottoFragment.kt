@@ -287,7 +287,17 @@ class CruscottoFragment : Fragment() {
 
         // Raggruppiamo gli strumenti per nome e account per avere un conteggio reale (non per movimento)
         val historyGroups = activeRaw.filter { InstrumentUtils.isHistoryBased(it.vincolo) }
-            .groupBy { "${it.account.id}_${it.vincolo.nome}" }
+            .groupBy { item ->
+                // Logica di raggruppamento differenziata:
+                if (item.vincolo.tipo == "Conto Titoli") {
+                    // Per PAC/ETF: raggruppiamo per Account + Nome (per gestire titoli diversi nello stesso conto)
+                    "${item.account.id}_${item.vincolo.nome}"
+                } else {
+                    // Per CC, CD Libero, FP, Immobili, ecc.: raggruppiamo SOLO per Account
+                    // (vogliamo vedere solo l'ultimo valore globale del conto, ignorando se l'etichetta è "Saldo" o altro)
+                    "${item.account.id}_STORY_TOTAL"
+                }
+            }
             .mapValues { entry -> 
                 val itemsInGroup = entry.value
                 val latest = itemsInGroup.maxBy { it.vincolo.dataDecorrenza }

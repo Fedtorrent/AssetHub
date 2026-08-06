@@ -28,6 +28,7 @@ class ChangelogFragment : Fragment() {
         val logText = """
             <font color='#448AFF'><b>VERSIONE 1.3</b></font><br/>
             • <b>Trend Patrimonio</b>: Nuova sezione con grafici storici del patrimonio Totale e Mobiliare, con aggiornamento in tempo reale e storico degli ultimi 9 mesi.<br/>
+            • <b>Raggruppamento Intelligente</b>: Risolto un problema che causava la duplicazione di alcuni conti nel Cruscotto in presenza di etichette storiche differenti.<br/>
             • <b>Salto della Staffa</b>: Rinominata la funzionalità "Salto della Quaglia" in "Salto della Staffa" con una descrizione più dettagliata e tecnica del funzionamento.<br/>
             • <b>Ottimizzazione Sicurezza</b>: La protezione privacy non viene più attivata erroneamente durante le operazioni di backup e ripristino, rendendo il salvataggio dei dati più fluido.<br/>
             • <b>Miglioramenti UI</b>: Perfezionata la terminologia nell'elenco movimenti per una maggiore chiarezza tra saldi e investimenti.<br/>
