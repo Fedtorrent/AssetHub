@@ -1,8 +1,8 @@
 # AssetHub
 
-<p align="center">
+<p style="text-align: center;">
   <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_0_Icona.png" width="220" alt="Logo" />
-</p>  
+</p>
 
 **AssetHub** è un'applicazione Android progettata per monitorare il proprio **Patrimonio** e i propri **Investimenti** in modo semplice, efficace e, soprattutto, sicuro.
 
@@ -28,7 +28,7 @@ AssetHub offre una suite completa di strumenti per la gestione finanziaria perso
 
 L'app presenta un'interfaccia moderna e intuitiva basata sui principi del Material Design.
 
-<p align="center">
+<p style="text-align: center;">
   <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_1_Intro.jpeg" width="220" alt="Screenshot 1" />
   <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_2_Crusc.jpeg" width="220" alt="Screenshot 2" />
   <img src="https://github.com/Fedtorrent/LeMieApp.github.io/blob/main/images/AH_3_Banche.jpeg" width="220" alt="Screenshot 3" />
