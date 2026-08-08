@@ -110,7 +110,11 @@ class LinksUtiliFragment : Fragment() {
             holder.b.textLinkTitolo.text = item.title
             holder.b.textLinkDesc.text = item.description
             holder.b.textLinkUrl.text = item.url
-            holder.b.imgLinkIcon.setImageResource(item.iconResId)
+            
+            // Caricamento icona tramite nome risorsa
+            val context = holder.itemView.context
+            val resId = context.resources.getIdentifier(item.iconName, "drawable", context.packageName)
+            holder.b.imgLinkIcon.setImageResource(if (resId != 0) resId else R.drawable.ic_globe)
             
             holder.b.btnDeleteLink.visibility = View.VISIBLE
             holder.b.btnDeleteLink.setOnClickListener { onDeleteClick(item) }

@@ -179,6 +179,35 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Routine di riparazione icone Link Utili (v17 Migration Fix)
+        if (!appPrefs.getBoolean("repaired_links_v17", false)) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val dao = AppDatabase.getDatabase(this@MainActivity).vincoloDao()
+                    val links = dao.getAllUsefulLinks().first()
+                    val systemLinksMap = mapOf(
+                        "FinanzaOnline" to "ic_finanzaonline",
+                        "justETF" to "ic_justetf",
+                        "Simple Tools for Investors" to "ic_sti",
+                        "Calcolatore Rendimento" to "ic_dberti",
+                        "Calcolo Rendimenti BFP" to "ic_cdp",
+                        "Deposifire" to "ic_df",
+                        "Curvo Backtest" to "ic_curvobacktest",
+                        "Morningstar Italia" to "ic_morningstar"
+                    )
+                    
+                    for (link in links) {
+                        systemLinksMap[link.title]?.let { correctIcon ->
+                            if (link.iconName == "ic_globe" || link.iconName.toIntOrNull() != null) {
+                                dao.insertUsefulLink(link.copy(iconName = correctIcon))
+                            }
+                        }
+                    }
+                    appPrefs.edit().putBoolean("repaired_links_v17", true).apply()
+                } catch (e: Exception) { e.printStackTrace() }
+            }
+        }
+
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 

@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-@Database(entities = [Vincolo::class, Account::class, Category::class, Bank::class, UsefulLink::class], version = 16, exportSchema = false)
+@Database(entities = [Vincolo::class, Account::class, Category::class, Bank::class, UsefulLink::class], version = 17, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun vincoloDao(): VincoloDao
 
@@ -23,6 +23,17 @@ abstract class AppDatabase : RoomDatabase() {
         private val MIGRATION_15_16 = object : Migration(15, 16) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `useful_links` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `iconResId` INTEGER NOT NULL)")
+            }
+        }
+
+        private val MIGRATION_16_17 = object : Migration(16, 17) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Migrazione per cambiare iconResId (Int) in iconName (String)
+                database.execSQL("CREATE TABLE IF NOT EXISTS `useful_links_new` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `iconName` TEXT NOT NULL)")
+                // Copiamo i dati impostando un'icona di default per tutti, verranno corretti al primo avvio
+                database.execSQL("INSERT INTO `useful_links_new` (id, title, description, url, iconName) SELECT id, title, description, url, 'ic_globe' FROM useful_links")
+                database.execSQL("DROP TABLE `useful_links` ")
+                database.execSQL("ALTER TABLE `useful_links_new` RENAME TO `useful_links` ")
             }
         }
 
@@ -79,7 +90,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "imieivincoli_database"
                 )
-                .addMigrations(MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16)
+                .addMigrations(MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17)
                 .fallbackToDestructiveMigration()
                 .build()
                 INSTANCE = instance
@@ -110,14 +121,14 @@ abstract class AppDatabase : RoomDatabase() {
         suspend fun seedUsefulLinks(dao: VincoloDao) {
             if (dao.getUsefulLinksCount() == 0) {
                 val initialLinks = listOf(
-                    UsefulLink(title = "FinanzaOnline", description = "News, forum e monitor per il confronto tra prodotti bancari e investimenti.", url = "https://www.finanzaonline.com/", iconResId = R.drawable.ic_finanzaonline),
-                    UsefulLink(title = "justETF", description = "Il portale leader in Europa per la ricerca, il confronto e l'analisi dei fondi ETF.", url = "https://www.justetf.com/it/", iconResId = R.drawable.ic_justetf),
-                    UsefulLink(title = "Simple Tools for Investors", description = "Suite completa per l'analisi e il calcolo dei rendimenti di obbligazioni e titoli di stato quotati.", url = "https://www.simpletoolsforinvestors.eu/index.shtml#", iconResId = R.drawable.ic_sti),
-                    UsefulLink(title = "Calcolatore Rendimento", description = "Strumento di calcolo per determinare il rendimento netto reale di obbligazioni e titoli di stato.", url = "https://davideberti.it/calcolatore-rendimento-obbligazioni-e-titoli-di-stato", iconResId = R.drawable.ic_dberti),
-                    UsefulLink(title = "Calcolo Rendimenti BFP", description = "Calcolatore ufficiale CDP per conoscere interessi e valore di rimborso dei Buoni Fruttiferi Postali.", url = "https://www.cdp.it/sitointernet/it/calcolo_dei_rendimenti.page", iconResId = R.drawable.ic_cdp),
-                    UsefulLink(title = "Deposifire", description = "Aggregatore indipendente per confrontare i tassi dei migliori conti deposito e conti correnti remunerati.", url = "https://www.deposifire.com/?p=conti", iconResId = R.drawable.ic_df),
-                    UsefulLink(title = "Curvo Backtest", description = "Simula l'andamento storico di un PAC o di un portafoglio di ETF.", url = "https://curvo.eu/backtest/it", iconResId = R.drawable.ic_curvobacktest),
-                    UsefulLink(title = "Morningstar Italia", description = "Dati, rating e analisi approfondite su Fondi Comuni ed ETF.", url = "https://www.morningstar.it/", iconResId = R.drawable.ic_morningstar)
+                    UsefulLink(title = "FinanzaOnline", description = "News, forum e monitor per il confronto tra prodotti bancari e investimenti.", url = "https://www.finanzaonline.com/", iconName = "ic_finanzaonline"),
+                    UsefulLink(title = "justETF", description = "Il portale leader in Europa per la ricerca, il confronto e l'analisi dei fondi ETF.", url = "https://www.justetf.com/it/", iconName = "ic_justetf"),
+                    UsefulLink(title = "Simple Tools for Investors", description = "Suite completa per l'analisi e il calcolo dei rendimenti di obbligazioni e titoli di stato quotati.", url = "https://www.simpletoolsforinvestors.eu/index.shtml#", iconName = "ic_sti"),
+                    UsefulLink(title = "Calcolatore Rendimento", description = "Strumento di calcolo per determinare il rendimento netto reale di obbligazioni e titoli di stato.", url = "https://davideberti.it/calcolatore-rendimento-obbligazioni-e-titoli-di-stato", iconName = "ic_dberti"),
+                    UsefulLink(title = "Calcolo Rendimenti BFP", description = "Calcolatore ufficiale CDP per conoscere interessi e valore di rimborso dei Buoni Fruttiferi Postali.", url = "https://www.cdp.it/sitointernet/it/calcolo_dei_rendimenti.page", iconName = "ic_cdp"),
+                    UsefulLink(title = "Deposifire", description = "Aggregatore indipendente per confrontare i tassi dei migliori conti deposito e conti correnti remunerati.", url = "https://www.deposifire.com/?p=conti", iconName = "ic_df"),
+                    UsefulLink(title = "Curvo Backtest", description = "Simula l'andamento storico di un PAC o di un portafoglio di ETF.", url = "https://curvo.eu/backtest/it", iconName = "ic_curvobacktest"),
+                    UsefulLink(title = "Morningstar Italia", description = "Dati, rating e analisi approfondite su Fondi Comuni ed ETF.", url = "https://www.morningstar.it/", iconName = "ic_morningstar")
                 )
                 for (link in initialLinks) {
                     dao.insertUsefulLink(link)

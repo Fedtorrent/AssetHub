@@ -26,6 +26,10 @@ class ChangelogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val logText = """
+            <font color='#448AFF'><b>VERSIONE 1.3.1</b></font><br/>
+            • <b>Backup Avanzato</b>: Il sistema di salvataggio ora include anche le tue personalizzazioni delle Impostazioni (mesi visualizzazione, filtri, privacy).<br/>
+            • <b>Stabilità Icone</b>: Risolto un problema tecnico che causava la visualizzazione di icone errate nei Link Utili dopo l'aggiornamento dell'app.<br/>            
+            <br/>
             <font color='#448AFF'><b>VERSIONE 1.3</b></font><br/>
             • <b>Trend Patrimonio</b>: Nuova sezione con grafici storici del patrimonio Totale e Mobiliare, con aggiornamento in tempo reale e storico degli ultimi 9 mesi.<br/>
             • <b>Raggruppamento Intelligente</b>: Risolto un problema che causava la duplicazione di alcuni conti nel Cruscotto in presenza di etichette storiche differenti.<br/>

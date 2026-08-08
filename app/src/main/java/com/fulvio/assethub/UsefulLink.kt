@@ -10,5 +10,5 @@ data class UsefulLink(
     val title: String,
     val description: String,
     val url: String,
-    val iconResId: Int // Memorizziamo la risorsa locale
+    val iconName: String // Ora usiamo il nome del file (es. "ic_globe")
 )

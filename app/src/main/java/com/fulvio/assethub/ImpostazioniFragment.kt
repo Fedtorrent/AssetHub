@@ -387,6 +387,7 @@ class ImpostazioniFragment : Fragment() {
             try {
                 val database = AppDatabase.getDatabase(appContext)
                 val prefs = appContext.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                val securityPrefs = appContext.getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
 
                 appContext.contentResolver.openInputStream(uri)?.use { inputStream ->
                     val reader = inputStream.bufferedReader()
@@ -408,17 +409,31 @@ class ImpostazioniFragment : Fragment() {
 
                     for (line in reader.lineSequence()) {
                         if (line.isBlank()) continue
-                        val parts = line.split(";") // Torniamo a split semplice
+                        val parts = line.split(";")
 
                         when (parts[0]) {
                             "VALUES" -> {
                                 if (parts.size >= 4) {
                                     prefs.edit().apply {
-                                        putBoolean("hide_expired", parts[1].toBoolean())
+                                        putBoolean("show_expired", parts[1].toBoolean())
                                         putInt("mesi_cedole", parts[2].toIntOrNull() ?: 2)
                                         putInt("mesi_vincoli", parts[3].toIntOrNull() ?: 2)
                                         apply()
                                     }
+                                }
+                            }
+                            "PREFS" -> {
+                                // Nuovo formato esteso (v1.3+)
+                                if (parts.size >= 7) {
+                                    prefs.edit().apply {
+                                        putBoolean("show_deleted", parts[1].toBoolean())
+                                        putBoolean("show_expired", parts[2].toBoolean())
+                                        putBoolean("show_not_active", parts[3].toBoolean())
+                                        putInt("mesi_cedole", parts[4].toIntOrNull() ?: 2)
+                                        putInt("mesi_vincoli", parts[5].toIntOrNull() ?: 2)
+                                        apply()
+                                    }
+                                    securityPrefs.edit().putBoolean("background_protection", parts[6].toBoolean()).apply()
                                 }
                             }
                             "BANK" -> {
@@ -495,11 +510,15 @@ class ImpostazioniFragment : Fragment() {
                             "USEFUL_LINK" -> {
                                 if (parts.size >= 6) {
                                     linksImported = true
+                                    val iconValue = unescapeCsv(parts[5]) ?: "ic_globe"
+                                    // Se il valore è un vecchio ID numerico, usiamo il globo
+                                    val iconName = if (iconValue.toIntOrNull() != null) "ic_globe" else iconValue
+                                    
                                     dao.insertUsefulLink(UsefulLink(
                                         title = unescapeCsv(parts[2]) ?: "",
                                         description = unescapeCsv(parts[3]) ?: "",
                                         url = unescapeCsv(parts[4]) ?: "",
-                                        iconResId = parts[5].toIntOrNull() ?: R.drawable.ic_globe
+                                        iconName = iconName
                                     ))
                                 }
                             }
@@ -558,6 +577,7 @@ class ImpostazioniFragment : Fragment() {
                 val database = AppDatabase.getDatabase(appContext)
                 val dao = database.vincoloDao()
                 val prefs = appContext.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                val securityPrefs = appContext.getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
                 
                 val banks = dao.getAllBanks().first()
                 val accounts = dao.getAllAccounts().first()
@@ -565,9 +585,9 @@ class ImpostazioniFragment : Fragment() {
 
                 appContext.contentResolver.openOutputStream(uri)?.use { outputStream ->
                     BufferedWriter(OutputStreamWriter(outputStream)).use { writer ->
-                        writer.write("SETTINGS;hide_expired;mesi_cedole;mesi_vincoli")
+                        writer.write("SETTINGS;show_deleted;show_expired;show_not_active;mesi_cedole;mesi_vincoli;background_protection")
                         writer.newLine()
-                        writer.write("VALUES;${prefs.getBoolean("hide_expired", false)};${prefs.getInt("mesi_cedole", 2)};${prefs.getInt("mesi_vincoli", 2)}")
+                        writer.write("PREFS;${prefs.getBoolean("show_deleted", false)};${prefs.getBoolean("show_expired", false)};${prefs.getBoolean("show_not_active", true)};${prefs.getInt("mesi_cedole", 2)};${prefs.getInt("mesi_vincoli", 2)};${securityPrefs.getBoolean("background_protection", false)}")
                         writer.newLine()
                         writer.newLine()
 
@@ -602,10 +622,10 @@ class ImpostazioniFragment : Fragment() {
                         writer.newLine()
 
                         val links = dao.getAllUsefulLinks().first()
-                        writer.write("HEADER_USEFUL_LINKS;id;title;description;url;iconResId")
+                        writer.write("HEADER_USEFUL_LINKS;id;title;description;url;iconName")
                         writer.newLine()
                         for (l in links) {
-                            writer.write("USEFUL_LINK;${l.id};${escapeCsv(l.title)};${escapeCsv(l.description)};${escapeCsv(l.url)};${l.iconResId}")
+                            writer.write("USEFUL_LINK;${l.id};${escapeCsv(l.title)};${escapeCsv(l.description)};${escapeCsv(l.url)};${escapeCsv(l.iconName)}")
                             writer.newLine()
                         }
                     }

@@ -21,16 +21,16 @@ class AddLinkFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: VincoliViewModel by viewModels()
     
-    private var selectedIconResId: Int = R.drawable.ic_globe
+    private var selectedIconName: String = "ic_globe"
     private val availableIcons = listOf(
-        R.drawable.ic_globe,
-        R.drawable.ic_bank,
-        R.drawable.ic_wallet,
-        R.drawable.ic_list,
-        R.drawable.ic_calculate,
-        R.drawable.ic_dashboard_gauge,
-        R.drawable.ic_utility,
-        R.drawable.ic_settings
+        "ic_globe",
+        "ic_bank",
+        "ic_wallet",
+        "ic_list",
+        "ic_calculate",
+        "ic_dashboard_gauge",
+        "ic_utility",
+        "ic_settings"
     )
 
     override fun onCreateView(
@@ -59,16 +59,18 @@ class AddLinkFragment : Fragment() {
         val size = 48.dpToPx()
         val margin = 8.dpToPx()
         
-        availableIcons.forEach { iconRes ->
+        availableIcons.forEach { iconName ->
+            val iconResId = getIconResId(iconName)
             val frame = FrameLayout(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(size, size).apply {
                     setMargins(margin, 0, margin, 0)
                 }
                 
+                val isSelected = (iconName == selectedIconName)
                 val bg = android.graphics.drawable.GradientDrawable().apply {
                     shape = android.graphics.drawable.GradientDrawable.OVAL
-                    setColor(if (iconRes == selectedIconResId) 0x33448AFF else 0x11FFFFFF)
-                    setStroke(2.dpToPx(), if (iconRes == selectedIconResId) 0xFF448AFF.toInt() else 0x33FFFFFF.toInt())
+                    setColor(if (isSelected) 0x33448AFF else 0x11FFFFFF)
+                    setStroke(2.dpToPx(), if (isSelected) 0xFF448AFF.toInt() else 0x33FFFFFF.toInt())
                 }
                 background = bg
                 
@@ -76,19 +78,25 @@ class AddLinkFragment : Fragment() {
                     layoutParams = FrameLayout.LayoutParams(24.dpToPx(), 24.dpToPx()).apply {
                         gravity = android.view.Gravity.CENTER
                     }
-                    setImageResource(iconRes)
+                    setImageResource(iconResId)
                     imageTintList = android.content.res.ColorStateList.valueOf(
-                        if (iconRes == selectedIconResId) 0xFF448AFF.toInt() else 0xFFBBBBBB.toInt()
+                        if (isSelected) 0xFF448AFF.toInt() else 0xFFBBBBBB.toInt()
                     )
                 }
                 
                 addView(img)
                 setOnClickListener {
-                    selectedIconResId = iconRes
+                    selectedIconName = iconName
                     setupIconSelector() // Refresh selection
                 }
             }
             container.addView(frame)
+        }
+    }
+
+    private fun getIconResId(name: String): Int {
+        return resources.getIdentifier(name, "drawable", requireContext().packageName).let {
+            if (it == 0) R.drawable.ic_globe else it
         }
     }
 
@@ -116,7 +124,7 @@ class AddLinkFragment : Fragment() {
             title = title,
             description = desc,
             url = url,
-            iconResId = selectedIconResId
+            iconName = selectedIconName
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
