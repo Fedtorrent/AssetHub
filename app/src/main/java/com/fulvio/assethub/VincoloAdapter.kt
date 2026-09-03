@@ -86,6 +86,12 @@ class VincoloAdapter(
             }
             
             binding.textImporto.text = currencyFormatter.format(vincolo.importo)
+            if (vincolo.dataDecorrenza <= now.timeInMillis) {
+                binding.textLastUpdate.visibility = View.VISIBLE
+                binding.textLastUpdate.text = "Ultimo Agg. ${dateFormatter.format(Date(vincolo.dataDecorrenza))}"
+            } else {
+                binding.textLastUpdate.visibility = View.GONE
+            }
             
             // Gestione riga extra "Investito fino ad ora" per PAC e % Performance
             val isIncremental = InstrumentUtils.isIncremental(vincolo.tipo, vincolo.strumentoDettaglio)

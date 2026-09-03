@@ -92,6 +92,7 @@ class ContiFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.toolbar_menu, menu)
                 menu.findItem(R.id.action_info)?.isVisible = false
+                menu.findItem(R.id.action_sort)?.isVisible = false
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

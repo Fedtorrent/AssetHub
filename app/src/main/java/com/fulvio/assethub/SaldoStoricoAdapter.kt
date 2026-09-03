@@ -35,8 +35,10 @@ class SaldoStoricoAdapter(
             binding.textData.text = dateFormatter.format(Date(item.dataDecorrenza))
             binding.textSaldo.text = currencyFormatter.format(item.importo)
             
+            val isIncremental = InstrumentUtils.isIncremental(item.tipo, item.strumentoDettaglio)
+            
             // 2° riga: Quote e Prezzo (Bianco)
-            if (item.numeroQuote > 0) {
+            if ((isIncremental && item.prezzoAcquisto > 0) || item.numeroQuote > 0) {
                 binding.textQuotesInfo.visibility = View.VISIBLE
                 val qStr = String.format(Locale.ITALY, "%.2f", item.numeroQuote)
                 val pStr = currencyFormatter.format(item.prezzoAcquisto)
@@ -61,7 +63,6 @@ class SaldoStoricoAdapter(
             // 3° riga: Mostriamo sempre il totale se è un PAC o CC
             binding.layoutInvestedTotal.visibility = View.VISIBLE
             
-            val isIncremental = InstrumentUtils.isIncremental(item.tipo, item.strumentoDettaglio)
             if (isIncremental) {
                 binding.labelInvested.text = "Investito fino ad ora: "
             } else {

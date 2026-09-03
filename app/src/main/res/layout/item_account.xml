@@ -71,13 +71,25 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/text_total_balance"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#4CAF50"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:gravity="end"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/text_total_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#4CAF50"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/text_last_update"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#888888"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

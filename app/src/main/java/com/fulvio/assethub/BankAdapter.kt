@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fulvio.assethub.databinding.ItemBankBinding
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class BankAdapter(
@@ -18,6 +19,7 @@ class BankAdapter(
 ) : ListAdapter<BankWithAccounts, BankAdapter.BankViewHolder>(BankDiffCallback()) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale.ITALY)
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.ITALY)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BankViewHolder {
         val binding = ItemBankBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -40,11 +42,21 @@ class BankAdapter(
             var totalPatrimonio = 0.0
             var activeInstrumentsCount = 0
             var activeAccountsCount = 0
+            var latestTimestamp = 0L
+            val now = System.currentTimeMillis()
             
             accounts.forEach { wrapper ->
                 if (!wrapper.account.isDeleted) {
                     activeAccountsCount++
+                    if (wrapper.account.lastUpdate <= now && wrapper.account.lastUpdate > latestTimestamp) {
+                        latestTimestamp = wrapper.account.lastUpdate
+                    }
                     val activeVincoli = wrapper.vincoli.filter { !it.isDeleted }
+                    activeVincoli.forEach { v ->
+                        if (v.dataDecorrenza <= now && v.dataDecorrenza > latestTimestamp) {
+                            latestTimestamp = v.dataDecorrenza
+                        }
+                    }
                     val type = wrapper.category?.systemType ?: Category.TYPE_DEPOSITO
                     
                     val (accBalance, accCount) = InstrumentUtils.calculateAccountStats(
@@ -61,6 +73,12 @@ class BankAdapter(
             }
             
             binding.textTotalBalance.text = currencyFormatter.format(totalPatrimonio)
+            if (latestTimestamp > 0L) {
+                binding.textLastUpdate.visibility = View.VISIBLE
+                binding.textLastUpdate.text = "Ultimo Agg. ${dateFormatter.format(Date(latestTimestamp))}"
+            } else {
+                binding.textLastUpdate.visibility = View.GONE
+            }
             binding.textAccountsCount.text = "$activeAccountsCount conti"
             binding.textInstrumentsCount.text = "$activeInstrumentsCount strumenti"
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.fulvio.assethub.databinding.ItemAccountBinding
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AccountAdapter(
@@ -19,6 +20,7 @@ class AccountAdapter(
 ) : ListAdapter<AccountWithBankAndVincoli, AccountAdapter.AccountViewHolder>(AccountDiffCallback()) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale.ITALY)
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.ITALY)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding = ItemAccountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -57,6 +59,21 @@ class AccountAdapter(
             }
             
             binding.textTotalBalance.text = currencyFormatter.format(totalBalance)
+            
+            val now = System.currentTimeMillis()
+            var latestTimestamp = if (account.lastUpdate <= now) account.lastUpdate else 0L
+            activeVincoli.forEach { v ->
+                if (v.dataDecorrenza <= now && v.dataDecorrenza > latestTimestamp) {
+                    latestTimestamp = v.dataDecorrenza
+                }
+            }
+
+            if (latestTimestamp > 0L) {
+                binding.textLastUpdate.visibility = View.VISIBLE
+                binding.textLastUpdate.text = "Ultimo Agg. ${dateFormatter.format(Date(latestTimestamp))}"
+            } else {
+                binding.textLastUpdate.visibility = View.GONE
+            }
             binding.textAccountInfo.visibility = View.GONE
 
             // Feedback visivo per eliminati

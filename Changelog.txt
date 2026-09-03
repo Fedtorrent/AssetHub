@@ -1,5 +1,25 @@
-VERSIONE 1.2 (da rilasciare)
+VERSIONE 1.3.1
+• Backup Avanzato: Il sistema di salvataggio ora include anche le tue personalizzazioni delle Impostazioni (mesi visualizzazione, filtri, privacy).
+• Stabilità Icone: Risolto un problema tecnico che causava la visualizzazione di icone errate nei Link Utili dopo l'aggiornamento dell'app.
+• Data Ultimo Aggiornamento: Inserita la data "Ultimo Agg. gg/mm/aaaa" sotto gli importi nelle schede Banche, Conti e Prodotti (escludendo automaticamente le date future).
+• Gestione Quotazioni Strumenti: Migliorata la visualizzazione dei movimenti per ETF, ETC ed ETN mostrando quote e prezzo anche quando si effettuano aggiornamenti di sola quotazione (0 quote).
+• Pulizia Lista Prodotti: Rimossi i conti di base (Conti Correnti, Deposito, Fondi Pensione) dalla lista dei prodotti finanziari per evitare voci duplicate.
+• Ordinamento per Banca: Aggiunto il pulsante di cambio ordinamento (da alfabetico a per banca e viceversa) con icona dedicata nella barra superiore delle pagine Conti e Strumenti.
+
+VERSIONE 1.3
+• Trend Patrimonio: Nuova sezione con grafici storici del patrimonio Totale e Mobiliare, con aggiornamento in tempo reale e storico degli ultimi 9 mesi.
+• Raggruppamento Intelligente: Risolto un problema che causava la duplicazione di alcuni conti nel Cruscotto in presenza di etichette storiche differenti.
+• Salto della Staffa: Rinominata la funzionalità "Salto della Quaglia" in "Salto della Staffa" con una descrizione più dettagliata e tecnica del funzionamento.
+• Ottimizzazione Sicurezza: La protezione privacy non viene più attivata erroneamente durante le operazioni di backup e ripristino, rendendo il salvataggio dei dati più fluido.
+• Miglioramenti UI: Perfezionata la terminologia nell'elenco movimenti per una maggiore chiarezza tra saldi e investimenti.
+
+VERSIONE 1.2
+• Doppia Analisi Asset: Introdotti due nuovi grafici nel Cruscotto per distinguere la distribuzione macro (Asset Class: Liquidità, Immobiliare, ecc.) dal dettaglio specifico degli Investimenti (ETF, Azioni, BTP).
+• Ottimizzazione Liste: Perfezionata la visualizzazione della distribuzione per strumento con indicazione delle percentuali e testi più ordinati.
+• Privacy Totale: Disabilitato il backup automatico sul cloud di Google per garantire che i tuoi dati finanziari rimangano esclusivamente all'interno del dispositivo.
+• Backup Completo: Il sistema di salvataggio ora include i Link Utili personalizzati e garantisce il ripristino automatico dei link predefiniti dai vecchi backup.
 • Tema Scuro Predefinito: Forzata la modalità scura per l'intera app per garantire la massima leggibilità di tutti i campi, indipendentemente dalle impostazioni di sistema.
+• Risolti bug minori.
 
 VERSIONE 1.1 
 • Link Utili Dinamici: Ora puoi aggiungere, personalizzare ed eliminare i tuoi collegamenti finanziari preferiti direttamente dal database. 

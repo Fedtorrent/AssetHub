@@ -29,6 +29,10 @@ class ChangelogFragment : Fragment() {
             <font color='#448AFF'><b>VERSIONE 1.3.1</b></font><br/>
             • <b>Backup Avanzato</b>: Il sistema di salvataggio ora include anche le tue personalizzazioni delle Impostazioni (mesi visualizzazione, filtri, privacy).<br/>
             • <b>Stabilità Icone</b>: Risolto un problema tecnico che causava la visualizzazione di icone errate nei Link Utili dopo l'aggiornamento dell'app.<br/>            
+            • <b>Data Ultimo Aggiornamento</b>: Inserita la data "Ultimo Agg. gg/mm/aaaa" sotto gli importi nelle schede Banche, Conti e Prodotti (escludendo automaticamente le date future).<br/>
+            • <b>Gestione Quotazioni Strumenti</b>: Migliorata la visualizzazione dei movimenti per ETF, ETC ed ETN mostrando quote e prezzo anche quando si effettuano aggiornamenti di sola quotazione (0 quote).<br/>
+            • <b>Pulizia Lista Prodotti</b>: Rimossi i conti di base (Conti Correnti, Deposito, Fondi Pensione) dalla lista dei prodotti finanziari per evitare voci duplicate.<br/>
+            • <b>Ordinamento per Banca</b>: Aggiunto il pulsante di cambio ordinamento (da alfabetico a per banca e viceversa) con icona dedicata nella barra superiore delle pagine Conti e Strumenti.<br/>
             <br/>
             <font color='#448AFF'><b>VERSIONE 1.3</b></font><br/>
             • <b>Trend Patrimonio</b>: Nuova sezione con grafici storici del patrimonio Totale e Mobiliare, con aggiornamento in tempo reale e storico degli ultimi 9 mesi.<br/>

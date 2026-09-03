@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -31,6 +32,7 @@ class ListaVincoliFragment : Fragment() {
     private val viewModel: VincoliViewModel by viewModels()
     private var fullList: List<VincoloWithFullInfo> = emptyList()
     private var accountId: Long = -1L
+    private var sortByBank = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -133,10 +135,18 @@ class ListaVincoliFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.toolbar_menu, menu)
+                menu.findItem(R.id.action_sort)?.isVisible = true
+                updateSortMenuIcon(menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    R.id.action_sort -> {
+                        sortByBank = !sortByBank
+                        requireActivity().invalidateMenu()
+                        applyFilters(now)
+                        true
+                    }
                     R.id.action_add -> {
                         val bundle = Bundle().apply {
                             putLong("accountId", accountId)
@@ -160,6 +170,17 @@ class ListaVincoliFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun updateSortMenuIcon(menu: Menu) {
+        val item = menu.findItem(R.id.action_sort) ?: return
+        if (sortByBank) {
+            item.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_sort_alpha)
+            item.title = "Ordina Alfabeticamente"
+        } else {
+            item.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bank)
+            item.title = "Ordina per Banca"
+        }
+    }
+
     private fun applyFilters(now: Calendar) {
         val query = binding.editSearch.text.toString().lowercase().trim()
         val adapter = binding.recyclerViewVincoli.adapter as? VincoloAdapter
@@ -174,6 +195,12 @@ class ListaVincoliFragment : Fragment() {
             val accountWithBank = item.accountWithBank ?: return@filter false
             val account = accountWithBank.account
             val bank = accountWithBank.bank
+            
+            val tipo = vincolo.tipo
+            if (tipo == "Conto Corrente" || tipo == "Conto Deposito" || tipo == "Conto Deposito Libero" || tipo == "Fondo Pensione" ||
+                tipo == "Immobili" || tipo == "Contanti" || tipo == "Veicoli" || tipo == "Gioielli" || tipo == "Oggetti di valore") {
+                return@filter false
+            }
             
             if (bank.name == "Asset Personali" && accountId == -1L) return@filter false
             if (!showDeleted && (vincolo.isDeleted || account.isDeleted || bank.isDeleted)) return@filter false
@@ -243,7 +270,12 @@ class ListaVincoliFragment : Fragment() {
 
         val singleInstruments = baseFiltered.filter { !InstrumentUtils.isHistoryBased(it.vincolo) }
 
-        val finalResult = (historyGroups + singleInstruments).sortedBy { it.vincolo.nome }
+        val rawResult = historyGroups + singleInstruments
+        val finalResult = if (sortByBank) {
+            rawResult.sortedWith(compareBy({ it.accountWithBank?.bank?.name ?: "" }, { it.vincolo.nome }))
+        } else {
+            rawResult.sortedBy { it.vincolo.nome }
+        }
         
         (activity as? AppCompatActivity)?.supportActionBar?.title = "Strumenti"
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -21,6 +22,9 @@ class ListaProdottiFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: VincoliViewModel by viewModels()
     private var bankId: Long = -1L
+    private var sortByBank = false
+    private var lastAccounts: List<AccountWithBankAndVincoli> = emptyList()
+    private lateinit var accountAdapter: AccountAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +40,7 @@ class ListaProdottiFragment : Fragment() {
 
         bankId = arguments?.getLong("bankId") ?: -1L
 
-        val adapter = AccountAdapter(
+        accountAdapter = AccountAdapter(
             onViewClick = { item ->
                 val bundle = Bundle().apply {
                     putLong("accountId", item.account.id)
@@ -87,30 +91,40 @@ class ListaProdottiFragment : Fragment() {
         )
 
         binding.recyclerViewProdotti.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewProdotti.adapter = adapter
-
-        val prefs = requireContext().getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE)
+        binding.recyclerViewProdotti.adapter = accountAdapter
 
         viewModel.allAccountsWithBankAndVincoli.observe(viewLifecycleOwner) { accounts ->
-            val showDeleted = prefs.getBoolean("show_deleted", false)
-            val filteredByDelete = if (showDeleted) accounts else accounts.filter { !it.account.isDeleted && !it.bank.isDeleted }
-            
-            if (bankId == -1L) {
-                (activity as? AppCompatActivity)?.supportActionBar?.title = "Conti"
-                adapter.submitList(filteredByDelete)
-            } else {
-                // Cerchiamo il nome della banca anche se non ci sono ancora conti associati
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val bank = viewModel.getBankById(bankId)
-                    (activity as? AppCompatActivity)?.supportActionBar?.title = bank?.name ?: "Conti Banca"
-                }
-                
-                val filtered = filteredByDelete.filter { it.account.bankId == bankId }
-                adapter.submitList(filtered)
-            }
+            lastAccounts = accounts
+            applyList()
         }
 
         setupMenu()
+    }
+
+    private fun applyList() {
+        val prefs = requireContext().getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE)
+        val showDeleted = prefs.getBoolean("show_deleted", false)
+        val filteredByDelete = if (showDeleted) lastAccounts else lastAccounts.filter { !it.account.isDeleted && !it.bank.isDeleted }
+        
+        val sorted = if (sortByBank) {
+            filteredByDelete.sortedWith(compareBy({ it.bank.name }, { it.account.name }))
+        } else {
+            filteredByDelete.sortedBy { it.account.name }
+        }
+
+        if (bankId == -1L) {
+            (activity as? AppCompatActivity)?.supportActionBar?.title = "Conti"
+            accountAdapter.submitList(sorted)
+        } else {
+            // Cerchiamo il nome della banca anche se non ci sono ancora conti associati
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bank = viewModel.getBankById(bankId)
+                (activity as? AppCompatActivity)?.supportActionBar?.title = bank?.name ?: "Conti Banca"
+            }
+            
+            val filtered = sorted.filter { it.account.bankId == bankId }
+            accountAdapter.submitList(filtered)
+        }
     }
 
     private fun setupMenu() {
@@ -119,10 +133,18 @@ class ListaProdottiFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.toolbar_menu, menu)
                 menu.findItem(R.id.action_info)?.isVisible = false
+                menu.findItem(R.id.action_sort)?.isVisible = true
+                updateSortMenuIcon(menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    R.id.action_sort -> {
+                        sortByBank = !sortByBank
+                        requireActivity().invalidateMenu()
+                        applyList()
+                        true
+                    }
                     R.id.action_add -> {
                         val bundle = Bundle().apply { 
                             putLong("bankId", bankId) 
@@ -136,6 +158,17 @@ class ListaProdottiFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun updateSortMenuIcon(menu: Menu) {
+        val item = menu.findItem(R.id.action_sort) ?: return
+        if (sortByBank) {
+            item.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_sort_alpha)
+            item.title = "Ordina Alfabeticamente"
+        } else {
+            item.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bank)
+            item.title = "Ordina per Banca"
+        }
     }
 
     override fun onDestroyView() {
