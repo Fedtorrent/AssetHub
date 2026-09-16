@@ -197,7 +197,7 @@ class ListaVincoliFragment : Fragment() {
             val bank = accountWithBank.bank
             
             val tipo = vincolo.tipo
-            if (tipo == "Conto Corrente" || tipo == "Conto Deposito" || tipo == "Conto Deposito Libero" || tipo == "Fondo Pensione" ||
+            if (tipo == "Conto Corrente" || tipo == "Conto Deposito Libero" || tipo == "Fondo Pensione" ||
                 tipo == "Immobili" || tipo == "Contanti" || tipo == "Veicoli" || tipo == "Gioielli" || tipo == "Oggetti di valore") {
                 return@filter false
             }
