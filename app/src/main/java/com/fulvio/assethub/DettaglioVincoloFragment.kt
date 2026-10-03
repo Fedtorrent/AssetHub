@@ -78,7 +78,7 @@ class DettaglioVincoloFragment : Fragment() {
                     mostraDati(item.vincolo, accountWithBank.account, accountWithBank.bank)
                 }
                 requireActivity().invalidateMenu()
-                generaListaCedole(item.vincolo)
+                binding.cardCedole.visibility = View.GONE
                 
                 if (InstrumentUtils.isHistoryBased(item.vincolo)) {
                     binding.cardGraficoAndamento.visibility = View.VISIBLE
@@ -305,7 +305,7 @@ class DettaglioVincoloFragment : Fragment() {
             dati.add("Svincolabile" to if (vincolo.svincolabile) "Sì (Tasso: ${vincolo.tassoSvincolo}%)" else "No")
         } else if (isBFP) {
             dati.add("Durata" to "${vincolo.durataMesi} mesi")
-        } else {
+        } else if (vincolo.tipo == "Conto Deposito Libero") {
             dati.add("Tasso Attuale" to "${vincolo.tassoVincolo}%")
             val pMesi = if (vincolo.periodoCedolaMesi <= 0) 12 else vincolo.periodoCedolaMesi
             val paymentPeriod = when (pMesi) {
@@ -384,164 +384,6 @@ class DettaglioVincoloFragment : Fragment() {
             }
         }
         return bolloTotale
-    }
-
-    private fun generaListaCedole(vincolo: Vincolo) {
-        val container = binding.containerCedole
-        container.removeAllViews()
-
-        if (vincolo.strumentoDettaglio == "BFP") {
-            binding.cardCedole.visibility = View.GONE
-            return
-        }
-
-        val now = Calendar.getInstance()
-
-        if (vincolo.tipo == "Conto Corrente" || vincolo.tipo == "Conto Deposito Libero") {
-            // Per il Conto Libero mostriamo un'unica riga con il guadagno maturato ad oggi
-            val diffMillis = now.timeInMillis - vincolo.dataDecorrenza
-            val gg = (diffMillis / (1000L * 60 * 60 * 24)).toDouble().coerceAtLeast(0.0)
-            val lordoAttuale = (vincolo.importo * (vincolo.tassoVincolo / 100.0) * gg) / 365.0
-            val nettoAttuale = lordoAttuale * (1.0 - vincolo.tassazione)
-            
-            // Aggiungiamo eventuali interessi consolidati
-            val nettoTotale = nettoAttuale + vincolo.interessiMaturatiPrecedenti
-            val lordoTotale = lordoAttuale + (vincolo.interessiMaturatiPrecedenti / (1.0 - vincolo.tassazione))
-
-            // Rigo unico
-            val rowContainer = LinearLayout(requireContext()).apply {
-                orientation = LinearLayout.HORIZONTAL
-                setPadding(0, 12, 0, 12)
-            }
-            val txtDesc = TextView(requireContext()).apply {
-                text = "Interessi ad oggi"
-                setTextColor(0xFFFFFFFF.toInt())
-                setTypeface(null, android.graphics.Typeface.BOLD)
-                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-            }
-            val txtLordo = TextView(requireContext()).apply {
-                text = currencyFormatter.format(lordoTotale)
-                setTextColor(0xFF4CAF50.toInt())
-                gravity = android.view.Gravity.END
-                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f)
-            }
-            val txtNetto = TextView(requireContext()).apply {
-                text = currencyFormatter.format(nettoTotale)
-                setTextColor(0xFF4CAF50.toInt())
-                gravity = android.view.Gravity.END
-                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f)
-            }
-            rowContainer.addView(txtDesc)
-            rowContainer.addView(txtLordo)
-            rowContainer.addView(txtNetto)
-            container.addView(rowContainer)
-
-            binding.textTotaleLordo.text = currencyFormatter.format(lordoTotale)
-            binding.textTotaleNetto.text = currencyFormatter.format(nettoTotale)
-            binding.textResiduoLordo.text = currencyFormatter.format(0.0)
-            binding.textResiduoNetto.text = currencyFormatter.format(0.0)
-            return
-        }
-
-        val calScadenza = Calendar.getInstance().apply {
-            timeInMillis = vincolo.dataDecorrenza
-            add(Calendar.MONTH, vincolo.durataMesi)
-        }
-        val dataScadenza = calScadenza.time
-
-        val calCorrente = Calendar.getInstance().apply { timeInMillis = vincolo.dataDecorrenza }
-        val calInizio = Calendar.getInstance()
-
-        var sommaLordo = 0.0
-        var sommaNetto = 0.0
-        var residuoLordo = 0.0
-        var residuoNetto = 0.0
-
-        while (calCorrente.before(calScadenza)) {
-            calInizio.timeInMillis = calCorrente.timeInMillis
-            
-            if (vincolo.periodoCedolaMesi > 0) {
-                calCorrente.add(Calendar.MONTH, vincolo.periodoCedolaMesi)
-            } else {
-                calCorrente.time = dataScadenza
-            }
-
-            if (calCorrente.after(calScadenza)) {
-                calCorrente.time = dataScadenza
-            }
-
-            // Calcolo importi basato sulla tipologia
-            val lordo: Double
-            
-            if (vincolo.tipo == "Conto Deposito") {
-                val diffMillis = calCorrente.timeInMillis - calInizio.timeInMillis
-                val giorni = (diffMillis / (24 * 60 * 60 * 1000)).toDouble()
-                lordo = (vincolo.importo * (vincolo.tassoVincolo / 100.0) * giorni) / 365.0
-            } else {
-                // Titoli di Stato e Obbligazioni
-                val mesi = if (vincolo.periodoCedolaMesi > 0) vincolo.periodoCedolaMesi.toDouble() else vincolo.durataMesi.toDouble()
-                lordo = (vincolo.importo * (vincolo.tassoVincolo / 100.0) * mesi) / 12.0
-            }
-            val netto = lordo * (1.0 - vincolo.tassazione)
-
-            sommaLordo += lordo
-            sommaNetto += netto
-            
-            // Se la data della cedola è oggi o futura, aggiungila al residuo
-            if (!calCorrente.before(now)) {
-                residuoLordo += lordo
-                residuoNetto += netto
-            }
-
-            // Aggiunta riga alla UI
-            val row = LayoutInflater.from(requireContext()).inflate(android.R.layout.simple_list_item_1, null)
-            val rowContainer = LinearLayout(requireContext()).apply {
-                orientation = LinearLayout.HORIZONTAL
-                setPadding(0, 12, 0, 12)
-            }
-            
-            val isFutureOrToday = !calCorrente.before(now)
-            val textColor = if (isFutureOrToday) 0xFFFFFFFF.toInt() else 0xFF888888.toInt()
-            val amountColor = if (isFutureOrToday) 0xFF4CAF50.toInt() else 0xFF668866.toInt()
-
-            val txtDate = TextView(requireContext()).apply {
-                text = dateFormatter.format(calCorrente.time)
-                setTextColor(textColor)
-                if (isFutureOrToday) {
-                    setTypeface(null, android.graphics.Typeface.BOLD)
-                }
-                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-            }
-            val txtLordo = TextView(requireContext()).apply {
-                text = currencyFormatter.format(lordo)
-                setTextColor(amountColor)
-                gravity = android.view.Gravity.END
-                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f)
-            }
-            val txtNetto = TextView(requireContext()).apply {
-                text = currencyFormatter.format(netto)
-                setTextColor(amountColor)
-                gravity = android.view.Gravity.END
-                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f)
-            }
-
-            rowContainer.addView(txtDate)
-            rowContainer.addView(txtLordo)
-            rowContainer.addView(txtNetto)
-            container.addView(rowContainer)
-            
-            val divider = View(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1)
-                setBackgroundColor(0xFF333333.toInt())
-            }
-            container.addView(divider)
-        }
-
-        // Mostra i totali calcolati
-        binding.textTotaleLordo.text = currencyFormatter.format(sommaLordo)
-        binding.textTotaleNetto.text = currencyFormatter.format(sommaNetto)
-        binding.textResiduoLordo.text = currencyFormatter.format(residuoLordo)
-        binding.textResiduoNetto.text = currencyFormatter.format(residuoNetto)
     }
 
     override fun onDestroyView() {

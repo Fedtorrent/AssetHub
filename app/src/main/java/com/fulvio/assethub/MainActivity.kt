@@ -254,7 +254,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_conti, R.id.navigation_add_bank -> R.id.navigation_conti
                 R.id.navigation_lista_prodotti, R.id.navigation_add_product, R.id.navigation_lista_prodotti_detail -> R.id.navigation_lista_prodotti
                 R.id.navigation_lista_vincoli, R.id.navigation_add_vincolo, R.id.navigation_dettaglio_vincolo, R.id.navigation_storico_asset, R.id.navigation_lista_vincoli_detail -> R.id.navigation_lista_vincoli
-                R.id.navigation_utility, R.id.navigation_calcolatrice_interessi, R.id.navigation_salto_staffa, R.id.navigation_links_utili, R.id.navigation_add_link_utile -> R.id.navigation_utility
+                R.id.navigation_utility, R.id.navigation_salto_staffa, R.id.navigation_links_utili, R.id.navigation_add_link_utile -> R.id.navigation_utility
                 R.id.navigation_impostazioni, R.id.infoAppFragment, R.id.navigation_changelog -> R.id.navigation_impostazioni
                 else -> null
             }
@@ -281,7 +281,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.navigation_add_vincolo, 
                     R.id.navigation_dettaglio_vincolo -> R.color.teal_list
                     R.id.navigation_utility, 
-                    R.id.navigation_calcolatrice_interessi, 
+                    R.id.navigation_calcolatrice_interessi,
                     R.id.navigation_salto_staffa,
                     R.id.navigation_links_utili,
                     R.id.navigation_add_link_utile -> R.color.yellow_utility

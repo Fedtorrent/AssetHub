@@ -41,7 +41,7 @@ class CruscottoFragment : Fragment() {
 
     private var isTotaleExpanded = false
     private var isAndamentoExpanded = false
-    private var isCedoleExpanded = false
+    private var isCedolePagamentoExpanded = false
     private var isVincoliScadenzaExpanded = false
     private var isGraficoNomiExpanded = false
     private var isGraficoTipoExpanded = false
@@ -96,7 +96,7 @@ class CruscottoFragment : Fragment() {
 
         isTotaleExpanded = prefs.getBoolean("totale_expanded", false)
         isAndamentoExpanded = prefs.getBoolean("andamento_expanded", false)
-        isCedoleExpanded = prefs.getBoolean("cedole_expanded", false)
+        isCedolePagamentoExpanded = prefs.getBoolean("cedole_pagamento_expanded", false)
         isVincoliScadenzaExpanded = prefs.getBoolean("vincoli_scadenza_expanded", false)
         isGraficoNomiExpanded = prefs.getBoolean("grafico_nomi_expanded", false)
         isGraficoTipoExpanded = prefs.getBoolean("grafico_tipo_expanded", false)
@@ -107,7 +107,7 @@ class CruscottoFragment : Fragment() {
 
         updateCollapsibleView(binding.contentTotale, binding.imgArrowTotale, isTotaleExpanded)
         updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, isAndamentoExpanded)
-        updateCollapsibleView(binding.contentCedoleProssime, binding.imgArrowCedoleProssime, isCedoleExpanded)
+        updateCollapsibleView(binding.contentCedolePagamento, binding.imgArrowCedolePagamento, isCedolePagamentoExpanded)
         updateCollapsibleView(binding.contentVincoliScadenza, binding.imgArrowVincoliScadenza, isVincoliScadenzaExpanded)
         updateCollapsibleView(binding.contentGraficoNomi, binding.imgArrowGraficoNomi, isGraficoNomiExpanded)
         updateCollapsibleView(binding.contentGraficoTipo, binding.imgArrowGraficoTipo, isGraficoTipoExpanded)
@@ -126,10 +126,10 @@ class CruscottoFragment : Fragment() {
             updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, isAndamentoExpanded)
             prefs.edit().putBoolean("andamento_expanded", isAndamentoExpanded).apply()
         }
-        binding.headerCedoleProssime.setOnClickListener {
-            isCedoleExpanded = !isCedoleExpanded
-            updateCollapsibleView(binding.contentCedoleProssime, binding.imgArrowCedoleProssime, isCedoleExpanded)
-            prefs.edit().putBoolean("cedole_expanded", isCedoleExpanded).apply()
+        binding.headerCedolePagamento.setOnClickListener {
+            isCedolePagamentoExpanded = !isCedolePagamentoExpanded
+            updateCollapsibleView(binding.contentCedolePagamento, binding.imgArrowCedolePagamento, isCedolePagamentoExpanded)
+            prefs.edit().putBoolean("cedole_pagamento_expanded", isCedolePagamentoExpanded).apply()
         }
         binding.headerVincoliScadenza.setOnClickListener {
             isVincoliScadenzaExpanded = !isVincoliScadenzaExpanded
@@ -171,7 +171,7 @@ class CruscottoFragment : Fragment() {
     private fun toggleAll(expand: Boolean, prefs: android.content.SharedPreferences) {
         isTotaleExpanded = expand
         isAndamentoExpanded = expand
-        isCedoleExpanded = expand
+        isCedolePagamentoExpanded = expand
         isVincoliScadenzaExpanded = expand
         isGraficoNomiExpanded = expand
         isGraficoTipoExpanded = expand
@@ -182,7 +182,7 @@ class CruscottoFragment : Fragment() {
 
         updateCollapsibleView(binding.contentTotale, binding.imgArrowTotale, expand)
         updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, expand)
-        updateCollapsibleView(binding.contentCedoleProssime, binding.imgArrowCedoleProssime, expand)
+        updateCollapsibleView(binding.contentCedolePagamento, binding.imgArrowCedolePagamento, expand)
         updateCollapsibleView(binding.contentVincoliScadenza, binding.imgArrowVincoliScadenza, expand)
         updateCollapsibleView(binding.contentGraficoNomi, binding.imgArrowGraficoNomi, expand)
         updateCollapsibleView(binding.contentGraficoTipo, binding.imgArrowGraficoTipo, expand)
@@ -194,7 +194,7 @@ class CruscottoFragment : Fragment() {
         prefs.edit().apply {
             putBoolean("totale_expanded", expand)
             putBoolean("andamento_expanded", expand)
-            putBoolean("cedole_expanded", expand)
+            putBoolean("cedole_pagamento_expanded", expand)
             putBoolean("vincoli_scadenza_expanded", expand)
             putBoolean("grafico_nomi_expanded", expand)
             putBoolean("grafico_tipo_expanded", expand)
@@ -269,7 +269,7 @@ class CruscottoFragment : Fragment() {
         binding.textMobiliareLibero.text = currencyFormatter.format(totaleMobiliareLibero)
 
         setupAndamentoCharts(allInstrumentsWithCategory)
-        setupProssimeCedole(allInstrumentsForLists)
+        setupCedoleInPagamento(allInstrumentsForLists, activeBanks)
         setupVincoliInScadenza(allInstrumentsForLists)
         setupPatrimonioPerBancaChart(activeBanks)
         
@@ -841,38 +841,52 @@ class CruscottoFragment : Fragment() {
         }
     }
 
-    private fun setupProssimeCedole(items: List<VincoloWithAccount>) {
-        val container = binding.containerCedoleDashboard
+    private fun setupCedoleInPagamento(items: List<VincoloWithAccount>, activeBanks: List<BankWithAccounts>) {
+        val container = binding.containerCedolePagamentoDashboard
         container.removeAllViews()
         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val mesi = prefs.getInt("mesi_cedole", 2)
         val now = Calendar.getInstance()
         val limit = Calendar.getInstance().apply { add(Calendar.MONTH, mesi) }
 
-        val lista = mutableListOf<Triple<Long, Double, VincoloWithAccount>>()
+        val lista = mutableListOf<Pair<Long, String>>()
+
         for (item in items) {
             val v = item.vincolo
-            val end = Calendar.getInstance().apply { timeInMillis = v.dataDecorrenza; add(Calendar.MONTH, v.durataMesi) }
-            val curr = Calendar.getInstance().apply { timeInMillis = v.dataDecorrenza }
-            
-            while (curr.before(end)) {
-                val periodStart = curr.timeInMillis
-                if (v.periodoCedolaMesi > 0) curr.add(Calendar.MONTH, v.periodoCedolaMesi) else curr.time = end.time
-                if (curr.after(end)) curr.time = end.time
-                
-                if (!curr.before(now) && (mesi == 999 || !curr.after(limit))) {
-                    val lordo = if (v.tipo == "Conto Deposito") (v.importo * (v.tassoVincolo/100.0) * (curr.timeInMillis - periodStart)/(24*60*60*1000.0))/365.0 
-                                else (v.importo * (v.tassoVincolo/100.0) * (if (v.periodoCedolaMesi > 0) v.periodoCedolaMesi else v.durataMesi))/12.0
-                    lista.add(Triple(curr.timeInMillis, lordo * (1.0 - v.tassazione), item))
+            if (v.tipo == "Conto Corrente" || v.tipo == "Conto Deposito Libero" || v.strumentoDettaglio == "BFP") continue
+            if (v.durataMesi <= 0) continue
+
+            val bankName = activeBanks.find { b -> b.accounts.any { a -> a.account.id == item.account.id } }?.bank?.name ?: ""
+            val calScadenza = Calendar.getInstance().apply {
+                timeInMillis = v.dataDecorrenza
+                add(Calendar.MONTH, v.durataMesi)
+            }
+            val calCurr = Calendar.getInstance().apply { timeInMillis = v.dataDecorrenza }
+
+            val periodMesi = if (v.periodoCedolaMesi > 0) v.periodoCedolaMesi else v.durataMesi
+
+            while (calCurr.before(calScadenza)) {
+                calCurr.add(Calendar.MONTH, periodMesi)
+                if (calCurr.after(calScadenza)) {
+                    calCurr.timeInMillis = calScadenza.timeInMillis
+                }
+
+                if (!calCurr.before(now) && (mesi == 999 || !calCurr.after(limit))) {
+                    val dateStr = dateFormatter.format(calCurr.time)
+                    val line = "$dateStr - $bankName - ${v.nome}"
+                    lista.add(Pair(calCurr.timeInMillis, line))
                 }
             }
         }
+
         lista.sortBy { it.first }
-        lista.forEach { triple ->
+
+        lista.forEach { pair ->
             val row = TextView(requireContext()).apply {
-                text = "${dateFormatter.format(Date(triple.first))} - ${currencyFormatter.format(triple.second)} (${triple.third.vincolo.nome})"
+                text = pair.second
                 setTextColor(0xFFFFFFFF.toInt())
                 setPadding(0, 8, 0, 8)
+                textSize = 14f
             }
             container.addView(row)
         }

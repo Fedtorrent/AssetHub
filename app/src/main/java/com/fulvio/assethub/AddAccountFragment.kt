@@ -211,11 +211,11 @@ class AddAccountFragment : Fragment() {
             systemType == Category.TYPE_DEPOSITO || 
             systemType == Category.TYPE_TITOLI) View.VISIBLE else View.GONE
 
-        // Tasso d'interesse visibile SOLO per Conto Corrente / CD Libero e SOLO in creazione
-        binding.layoutTassoAccount.visibility = if ((systemType == Category.TYPE_CORRENTE || systemType == Category.TYPE_DEPOSITO_LIBERO) && accountId == -1L) View.VISIBLE else View.GONE
+        // Tasso d'interesse visibile SOLO per CD Libero e SOLO in creazione
+        binding.layoutTassoAccount.visibility = if (systemType == Category.TYPE_DEPOSITO_LIBERO && accountId == -1L) View.VISIBLE else View.GONE
         
-        // Periodicità Interessi visibile SOLO per Conto Corrente / CD Libero e SOLO in creazione
-        binding.layoutPeriodoInteressiAccount.visibility = if ((systemType == Category.TYPE_CORRENTE || systemType == Category.TYPE_DEPOSITO_LIBERO) && accountId == -1L) View.VISIBLE else View.GONE
+        // Periodicità Interessi visibile SOLO per CD Libero e SOLO in creazione
+        binding.layoutPeriodoInteressiAccount.visibility = if (systemType == Category.TYPE_DEPOSITO_LIBERO && accountId == -1L) View.VISIBLE else View.GONE
 
         // Note visibili per tutti gli Asset Personali
         val isPhysicalAsset = systemType == Category.TYPE_IMMOBILI || systemType == Category.TYPE_CONTANTI || 
@@ -339,15 +339,15 @@ class AddAccountFragment : Fragment() {
         val saldo = saldoStr.replace(',', '.').toDoubleOrNull() ?: 0.0
         val note = binding.editNoteAccount.text.toString()
         
-        // Lettura tasso d'interesse (solo per CC / CD Libero e solo in creazione)
+        // Lettura tasso d'interesse (solo per CD Libero e solo in creazione)
         val tassoStr = binding.editTassoAccount.text.toString()
-        val tassoIniziale = if ((systemType == Category.TYPE_CORRENTE || systemType == Category.TYPE_DEPOSITO_LIBERO) && accountId == -1L) {
+        val tassoIniziale = if (systemType == Category.TYPE_DEPOSITO_LIBERO && accountId == -1L) {
             tassoStr.replace(',', '.').toDoubleOrNull() ?: 0.0
         } else 0.0
 
-        // Lettura periodicità interessi (solo per CC / CD Libero e solo in creazione)
+        // Lettura periodicità interessi (solo per CD Libero e solo in creazione)
         val periodStr = binding.editPeriodoInteressiAccount.text.toString()
-        val periodIniziale = if ((systemType == Category.TYPE_CORRENTE || systemType == Category.TYPE_DEPOSITO_LIBERO) && accountId == -1L) {
+        val periodIniziale = if (systemType == Category.TYPE_DEPOSITO_LIBERO && accountId == -1L) {
             periodStr.toIntOrNull() ?: 12 // Default 12 mesi
         } else 0
         

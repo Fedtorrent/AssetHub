@@ -94,7 +94,7 @@ class WelcomeActivity : AppCompatActivity() {
                 listIcon = R.drawable.ic_list,
                 listContent = "<b>Strumenti:</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;Alcuni Conti possono contenere degli Strumenti. Un Conto Deposito contiene i Vincoli, un Conto Titoli contiene TdS, ETF, Fondi, ecc.",
                 listIcon2 = R.drawable.ic_dashboard_gauge,
-                listContent2 = "<b>Monitoraggio:</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;Per ogni strumento puoi consultare il dettaglio con il calcolo di interessi e bolli. Per gli asset volatili (ETF/Azioni), l'app genera un grafico dell'andamento basato sulla cronologia dei prezzi inseriti."
+                listContent2 = "<b>Monitoraggio:</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;Per ogni strumento puoi consultare il dettaglio e l'andamento storico del saldo. Per gli asset volatili (ETF/Azioni), l'app genera un grafico dell'andamento basato sulla cronologia dei prezzi inseriti."
             ),
             WelcomePage(
                 android.R.drawable.ic_menu_help,
@@ -108,7 +108,7 @@ class WelcomeActivity : AppCompatActivity() {
             WelcomePage(
                 android.R.drawable.ic_dialog_info,
                 "TIPS E NOTE",
-                "• Ricorda: una Banca tanti Conti; un Conto tanti Strumenti.\n\n• Calcoli Precisi: L'app usa i giorni esatti (base 365) per i Conti Deposito e la base mensile per TdS e Obbligazioni.\n\n• Imposta di Bollo: Lo 0,2% viene calcolato contando quante volte il vincolo 'attraversa' la data del 31 dicembre.\n\n• Titoli Step-Up (es. BTP Valore): Crea un vincolo separato per ogni differente tasso del periodo (il premio finale non è conteggiati).\n\n• Se vuoi solo aggiornare il valore quota di un PAC, Azione o Fondo, aggiungi un movimento con il nuovo valore quota e metti 0 (zero) nei campi Numero Quote e Importo Speso.\n\n• Backup: I dati sono solo sul tuo telefono. Esporta periodicamente un file CSV per sicurezza!",
+                "• Ricorda: una Banca tanti Conti; un Conto tanti Strumenti.\n\n• Aggiornamento Saldi: Inserisci periodicamente il saldo mensile per ciascun conto o strumento per mantenere traccia dell'andamento patrimoniale.\n\n• Imposta di Bollo: Lo 0,2% viene calcolato contando quante volte il vincolo 'attraversa' la data del 31 dicembre.\n\n• Se vuoi solo aggiornare il valore quota di un PAC, Azione o Fondo, aggiungi un movimento con il nuovo valore quota e metti 0 (zero) nei campi Numero Quote e Importo Speso.\n\n• Backup: I dati sono solo sul tuo telefono. Esporta periodicamente un file CSV per sicurezza!",
                 showVersion = false,
                 showTopTitle = false
             )

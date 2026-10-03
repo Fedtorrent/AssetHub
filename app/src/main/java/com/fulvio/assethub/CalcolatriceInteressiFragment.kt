@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.fulvio.assethub.databinding.FragmentCalcolatriceInteressiBinding
 import java.text.NumberFormat
@@ -28,67 +29,53 @@ class CalcolatriceInteressiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupListeners()
-    }
+        val taxOptions = arrayOf("26,00%", "12,50%")
+        binding.spinnerTassazione.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, taxOptions))
+        binding.spinnerTassazione.setText(taxOptions[0], false)
 
-    private fun setupListeners() {
         binding.btnCalcola.setOnClickListener {
-            if (validaCampi()) {
-                calcola()
-                nascondiTastiera()
-            }
+            calcolaInteressi()
         }
     }
 
-    private fun validaCampi(): Boolean {
-        var isValido = true
-        
-        if (binding.editCapitale.text.toString().isBlank()) {
-            binding.layoutCapitale.error = "Inserisci il capitale"
-            isValido = false
-        } else {
-            binding.layoutCapitale.error = null
-        }
-        
-        if (binding.editTasso.text.toString().isBlank()) {
-            binding.layoutTasso.error = "Inserisci il tasso"
-            isValido = false
-        } else {
-            binding.layoutTasso.error = null
-        }
-        
-        if (binding.editDurata.text.toString().isBlank()) {
-            binding.layoutDurata.error = "Inserisci la durata"
-            isValido = false
-        } else {
-            binding.layoutDurata.error = null
-        }
-        
-        return isValido
-    }
-
-    private fun nascondiTastiera() {
+    private fun calcolaInteressi() {
         val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
-        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
-    private fun calcola() {
-        val capitale = binding.editCapitale.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0
-        val tassoAnnuo = binding.editTasso.text.toString().replace(',', '.').toDoubleOrNull() ?: 0.0
-        val durataMesi = binding.editDurata.text.toString().toIntOrNull() ?: 0
-        
-        val tassazione = if (binding.radio26.isChecked) 0.26 else 0.125
-        
-        // Calcolo interesse lordo (base mensile 30/360 per semplicità di utility veloce)
-        val lordo = (capitale * (tassoAnnuo / 100.0) * durataMesi) / 12.0
-        val tasse = lordo * tassazione
-        val netto = lordo - tasse
-        val tassoNettoPercent = tassoAnnuo * (1.0 - tassazione)
+        val capitaleStr = binding.editCapitale.text.toString().replace(',', '.')
+        val tassoStr = binding.editTasso.text.toString().replace(',', '.')
+        val durataStr = binding.editDurata.text.toString()
+        val taxSelection = binding.spinnerTassazione.text.toString()
 
-        binding.textRisultatoLordo.text = currencyFormatter.format(lordo)
-        binding.textRisultatoTasse.text = "- ${currencyFormatter.format(tasse)}"
-        binding.textRisultatoNetto.text = currencyFormatter.format(netto)
-        binding.textRisultatoTassoNetto.text = String.format(Locale.ITALY, "%.2f%%", tassoNettoPercent)
+        val capitale = capitaleStr.toDoubleOrNull() ?: 0.0
+        val tassoLordoAnno = tassoStr.toDoubleOrNull() ?: 0.0
+        val mesi = durataStr.toIntOrNull() ?: 0
+
+        if (capitale <= 0 || tassoLordoAnno < 0 || mesi <= 0) {
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Dati non validi")
+                .setMessage("Inserisci valori validi per Capitale, Tasso e Durata.")
+                .setPositiveButton("OK", null)
+                .show()
+            return
+        }
+
+        val tassazione = if (taxSelection.contains("12,50")) 0.125 else 0.26
+
+        // Calcolo interessi lordi basato su base annua (mesi / 12)
+        val lordo = (capitale * (tassoLordoAnno / 100.0) * mesi) / 12.0
+        val imposte = lordo * tassazione
+        val netto = lordo - imposte
+        val capitaleFinale = capitale + netto
+        val tassoNettoAnno = tassoLordoAnno * (1.0 - tassazione)
+
+        binding.textLordo.text = currencyFormatter.format(lordo)
+        binding.textTassazioneImporto.text = "- ${currencyFormatter.format(imposte)}"
+        binding.textNetto.text = currencyFormatter.format(netto)
+        binding.textCapitaleFinale.text = currencyFormatter.format(capitaleFinale)
+        binding.textTassoNetto.text = String.format(Locale.ITALY, "%.2f%%", tassoNettoAnno)
+
+        binding.cardRisultati.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

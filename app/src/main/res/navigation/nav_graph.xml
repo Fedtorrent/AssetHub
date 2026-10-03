@@ -259,6 +259,8 @@
         android:label="Salto della Staffa"
         tools:layout="@layout/fragment_salto_staffa" />
 
+
+
     <fragment
         android:id="@+id/navigation_calcolatrice_interessi"
         android:name="com.fulvio.assethub.CalcolatriceInteressiFragment"

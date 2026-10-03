@@ -123,9 +123,14 @@ class VincoloAdapter(
             
             binding.textCodiceVincolo.text = String.format(Locale.ITALY, "%02d", vincolo.codiceVincolo)
 
-            // Gestione visibilità rigo Cedole
-            val isBFP = vincolo.strumentoDettaglio == "BFP"
-            binding.layoutCedolaInfo.visibility = if ((vincolo.periodoCedolaMesi > 0 || isContoLibero) && !isBFP) View.VISIBLE else View.GONE
+            // Gestione visibilità rigo Tasso Info
+            if (vincolo.tipo != "Conto Corrente" && vincolo.tassoVincolo > 0) {
+                binding.layoutCedolaInfo.visibility = View.VISIBLE
+                binding.textDataCedola.text = "Tasso Applicato"
+                binding.textImportoCedola.text = "${vincolo.tassoVincolo}%"
+            } else {
+                binding.layoutCedolaInfo.visibility = View.GONE
+            }
 
             // Feedback visivo per eliminati
             binding.root.alpha = if (vincolo.isDeleted || account.isDeleted || bank.isDeleted) 0.5f else 1.0f
@@ -133,15 +138,11 @@ class VincoloAdapter(
             if (isEffettivamenteScaduto) {
                 binding.textStatus.text = "VINCOLO SCADUTO"
                 binding.textStatus.setTextColor(0xFFF44336.toInt()) // Rosso
-                binding.textDataCedola.text = "Cedole terminate"
-                binding.textImportoCedola.text = "Ced. Netta: ${currencyFormatter.format(0.0)}"
             } else if (isFuturo) {
                 binding.textStatus.text = "STRUMENTO NON ATTIVO"
                 binding.textStatus.setTextColor(0xFFFFEB3B.toInt()) // Giallo
-                calcolaValoriScheda(vincolo, now, calScadenza, dataScadenza)
             } else {
                 binding.textStatus.text = ""
-                calcolaValoriScheda(vincolo, now, calScadenza, dataScadenza)
             }
 
             binding.btnView.setOnClickListener { onViewClick(item) }
@@ -155,48 +156,6 @@ class VincoloAdapter(
 
             binding.btnHardDelete.visibility = if (vincolo.isDeleted || isEffettivamenteScaduto) View.VISIBLE else View.GONE
             binding.btnHardDelete.setOnClickListener { onPermanentDeleteClick(item) }
-        }
-
-        private fun calcolaValoriScheda(vincolo: Vincolo, now: Calendar, calScadenza: Calendar, dataScadenza: Date) {
-            val calInizioPeriodo = Calendar.getInstance().apply { timeInMillis = vincolo.dataDecorrenza }
-            val calFinePeriodo = Calendar.getInstance().apply { timeInMillis = vincolo.dataDecorrenza }
-            
-            if (vincolo.tipo == "Conto Corrente" || vincolo.tipo == "Conto Deposito Libero") {
-                // Per i conti liberi usiamo il valore pre-calcolato passato nel campo interessiMaturatiPrecedenti
-                val interessiPeriodo = vincolo.interessiMaturatiPrecedenti
-
-                binding.textDataCedola.text = "Tasso Interesse: ${vincolo.tassoVincolo}%"
-                binding.textImportoCedola.text = "Interessi Netti: ${currencyFormatter.format(interessiPeriodo)}"
-                return
-            }
-
-            if (vincolo.periodoCedolaMesi > 0) {
-                calFinePeriodo.add(Calendar.MONTH, vincolo.periodoCedolaMesi)
-                while (!calFinePeriodo.after(now) && calFinePeriodo.before(calScadenza)) {
-                    calInizioPeriodo.timeInMillis = calFinePeriodo.timeInMillis
-                    calFinePeriodo.add(Calendar.MONTH, vincolo.periodoCedolaMesi)
-                }
-                if (calFinePeriodo.after(calScadenza)) {
-                    calFinePeriodo.time = dataScadenza
-                }
-            } else {
-                calFinePeriodo.time = dataScadenza
-            }
-
-            val cedolaNetta = if (vincolo.tipo == "Conto Deposito") {
-                val diffMillis = calFinePeriodo.timeInMillis - calInizioPeriodo.timeInMillis
-                val gg = (diffMillis / (24 * 60 * 60 * 1000)).toDouble()
-                val lordo = (vincolo.importo * (vincolo.tassoVincolo / 100.0) * gg) / 365.0
-                lordo * (1.0 - vincolo.tassazione)
-            } else {
-                // Titoli di Stato, Obbligazioni e altri strumenti a cedola fissa
-                val mesiPeriodo = if (vincolo.periodoCedolaMesi > 0) vincolo.periodoCedolaMesi.toDouble() else vincolo.durataMesi.toDouble()
-                val lordo = (vincolo.importo * (vincolo.tassoVincolo / 100.0) * mesiPeriodo) / 12.0
-                lordo * (1.0 - vincolo.tassazione)
-            }
-
-            binding.textDataCedola.text = "Prox. Cedola: ${dateFormatter.format(calFinePeriodo.time)}"
-            binding.textImportoCedola.text = "Ced. Netta: ${currencyFormatter.format(cedolaNetta)}"
         }
     }
 

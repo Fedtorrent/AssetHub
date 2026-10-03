@@ -25,6 +25,8 @@ class UtilityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         binding.cardCalcolatrice.setOnClickListener {
             findNavController().navigate(R.id.action_utility_to_calcolatrice)
         }

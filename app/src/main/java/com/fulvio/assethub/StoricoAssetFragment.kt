@@ -257,18 +257,8 @@ class StoricoAssetFragment : Fragment() {
                 if (firstActive.tipo == "Conto Corrente" || firstActive.tipo == "Conto Deposito Libero") {
                     val latest = vincoli.maxByOrNull { it.dataDecorrenza }
                     val saldoAttuale = latest?.importo ?: 0.0
-                    var periodicity = latest?.periodoCedolaMesi ?: 12
-                    if (periodicity <= 0) periodicity = 12 // Default a 12 se non impostato o errato
                     
                     addInfoRow("Saldo Attuale", currencyFormatter.format(saldoAttuale), 0xFF4CAF50.toInt(), true, 18f)
-                    
-                    // Calcolo Interessi Maturati basato sulla periodicità
-                    val nowTs = System.currentTimeMillis()
-                    val startDate = InterestUtils.getStartOfCalculationDate(periodicity)
-                    
-                    val interessiAnnuati = InterestUtils.calculateCumulativeInterests(vincoli, startDate, nowTs)
-                    addInfoRow("Interessi Lordi fino ad oggi", currencyFormatter.format(interessiAnnuati.first))
-                    addInfoRow("Interessi Netti fino ad oggi", currencyFormatter.format(interessiAnnuati.second))
 
                     addInfoRow("Banca", bank?.name ?: "-")
                     addInfoRow("Nome Conto", account?.name ?: "-")
@@ -278,19 +268,10 @@ class StoricoAssetFragment : Fragment() {
                         addInfoRow("Tipo Strumento", sDetail.replace("Titoli di Stato", "TdS"))
                     }
 
-                    val paymentPeriod = when (periodicity) {
-                        1 -> "Mensile"
-                        3 -> "Trimestrale"
-                        6 -> "Semestrale"
-                        12 -> "Annuale"
-                        else -> "$periodicity mesi"
-                    }
-                    addInfoRow("Periodo Pagamento Interessi", paymentPeriod)
-                    
                     val tassoLordo = latest?.tassoVincolo ?: 0.0
-                    val tassoNetto = tassoLordo * 0.74
-                    addInfoRow("Tasso Lordo", "$tassoLordo%")
-                    addInfoRow("Tasso Netto (26%)", "${String.format(Locale.ITALY, "%.2f", tassoNetto)}%")
+                    if (firstActive.tipo != "Conto Corrente" && tassoLordo > 0) {
+                        addInfoRow("Tasso Applicato", "$tassoLordo%")
+                    }
                 } else if (isPAC) {
                     val totalQuotes = InstrumentUtils.calculateTotalQuotes(vincoli)
                     val pmc = InstrumentUtils.calculatePMC(vincoli)

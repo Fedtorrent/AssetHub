@@ -307,9 +307,11 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Finestra 3: Cedole in Arrivo -->
+
+
+        <!-- Finestra: Prossime Cedole in pagamento -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_cedole_prossime"
+            android:id="@+id/card_cedole_pagamento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -323,7 +325,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/header_cedole_prossime"
+                    android:id="@+id/header_cedole_pagamento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
@@ -337,13 +339,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Cedole in arrivo"
+                        android:text="Prossime Cedole in pagamento"
                         android:textColor="@color/azure_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <ImageView
-                        android:id="@+id/img_arrow_cedole_prossime"
+                        android:id="@+id/img_arrow_cedole_pagamento"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_chevron_down"
@@ -351,7 +353,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/content_cedole_prossime"
+                    android:id="@+id/content_cedole_pagamento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -359,7 +361,7 @@
                     android:paddingBottom="16dp">
 
                     <LinearLayout
-                        android:id="@+id/container_cedole_dashboard"
+                        android:id="@+id/container_cedole_pagamento_dashboard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />

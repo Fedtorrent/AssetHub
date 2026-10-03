@@ -26,6 +26,12 @@ class ChangelogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val logText = """
+            <font color='#448AFF'><b>VERSIONE 1.4</b></font><br/>
+            • <b>Gestione Semplificata Saldi</b>: Rimossi i calcoli automatici complessi sugli interessi, lasciando l'inserimento flessibile del saldo mensile per ogni tipologia di conto o strumento.<br/>
+            • <b>Calcolatrice Interessi Indipendente</b>: Reintrodotta la calcolatrice finanziaria nelle Utility, utilizzabile liberamente inserendo manualmente capitale, tasso, durata e tassazione.<br/>
+            • <b>Prossime Cedole nel Cruscotto</b>: Aggiunta la nuova scheda "Prossime Cedole in pagamento" nella dashboard per monitorare con precisione le scadenze periodiche.<br/>
+            • <b>Pulizia Riferimenti Tassi</b>: Rimossi completamente i campi e le visualizzazioni dei tassi d'interesse per i conti correnti.<br/>
+            <br/>
             <font color='#448AFF'><b>VERSIONE 1.3.1</b></font><br/>
             • <b>Backup Avanzato</b>: Il sistema di salvataggio ora include anche le tue personalizzazioni delle Impostazioni (mesi visualizzazione, filtri, privacy).<br/>
             • <b>Stabilità Icone</b>: Risolto un problema tecnico che causava la visualizzazione di icone errate nei Link Utili dopo l'aggiornamento dell'app.<br/>            

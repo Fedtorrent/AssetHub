@@ -1,3 +1,9 @@
+VERSIONE 1.4
+• Gestione Semplificata Saldi: Rimossi i calcoli automatici complessi sugli interessi, lasciando l'inserimento flessibile del saldo mensile per ogni tipologia di conto o strumento.
+• Calcolatrice Interessi Indipendente: Reintrodotta la calcolatrice finanziaria nelle Utility, utilizzabile liberamente inserendo manualmente capitale, tasso, durata e tassazione.
+• Prossime Cedole nel Cruscotto: Aggiunta la nuova scheda "Prossime Cedole in pagamento" nella dashboard per monitorare con precisione le scadenze periodiche.
+• Pulizia Riferimenti Tassi: Rimossi completamente i campi e le visualizzazioni dei tassi d'interesse per i conti correnti.
+
 VERSIONE 1.3.1
 • Backup Avanzato: Il sistema di salvataggio ora include anche le tue personalizzazioni delle Impostazioni (mesi visualizzazione, filtri, privacy).
 • Stabilità Icone: Risolto un problema tecnico che causava la visualizzazione di icone errate nei Link Utili dopo l'aggiornamento dell'app.

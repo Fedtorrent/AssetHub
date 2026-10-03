@@ -68,7 +68,7 @@ class SaldoStoricoAdapter(
             } else {
                 binding.labelInvested.text = "Saldo: "
             }
-            if (item.tassoVincolo > 0 && !isIncremental) {
+            if (item.tipo != "Conto Corrente" && item.tassoVincolo > 0 && !isIncremental) {
                 binding.textTasso.visibility = View.VISIBLE
                 binding.textTasso.text = "Tasso: ${item.tassoVincolo}%"
             } else {

@@ -236,7 +236,6 @@ class ListaVincoliFragment : Fragment() {
             .mapValues { entry -> 
                 val items = entry.value
                 val latest = items.maxBy { it.vincolo.dataDecorrenza }
-                val vincoliList = items.map { it.vincolo }
                 
                 if (InstrumentUtils.isIncremental("Conto Titoli", latest.vincolo.strumentoDettaglio)) {
                     // Per PAC: 
@@ -252,16 +251,7 @@ class ListaVincoliFragment : Fragment() {
                         quotaVariazione = totalInvested
                     ))
                 } else if (latest.vincolo.tipo == "Conto Corrente" || latest.vincolo.tipo == "Conto Deposito Libero") {
-                    // Per CC e CD Libero: Calcoliamo gli interessi del periodo corrente
-                    val periodicity = latest.vincolo.periodoCedolaMesi
-                    val startDate = InterestUtils.getStartOfCalculationDate(periodicity)
-                    val nowTs = System.currentTimeMillis()
-                    val interests = InterestUtils.calculateCumulativeInterests(vincoliList, startDate, nowTs)
-                    
-                    // Usiamo interessiMaturatiPrecedenti come campo temporaneo per trasportare il calcolo all'adapter
-                    latest.copy(vincolo = latest.vincolo.copy(
-                        interessiMaturatiPrecedenti = interests.second
-                    ))
+                    latest
                 } else {
                     latest
                 }

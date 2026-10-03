@@ -381,21 +381,21 @@ class AddVincoloFragment : Fragment() {
         // LEGACY / ALTRI TIPI
         else {
             when (tipo) {
-                "Conto Corrente", "Conto Deposito Libero", "Fondo Pensione", "Immobili", 
+                "Conto Deposito Libero" -> {
+                    binding.layoutTassazione.visibility = View.GONE
+                    binding.layoutImporto.hint = "Saldo"
+                    binding.layoutTassoVincolo.visibility = View.VISIBLE
+                    binding.layoutTassoVincolo.hint = "Tasso d' Interesse"
+                    binding.layoutPeriodoCedola.visibility = View.VISIBLE
+                    binding.layoutPeriodoCedola.hint = "Periodicità Interessi (Mesi)"
+                }
+                "Conto Corrente", "Fondo Pensione", "Immobili", 
                 "Contanti", "Veicoli", "Gioielli", "Oggetti di valore" -> {
                     binding.layoutTassazione.visibility = View.GONE
-                    
                     if (isGenericPhysical) {
                         binding.layoutImporto.hint = "Valore Asset"
                     } else {
                         binding.layoutImporto.hint = "Saldo"
-                        binding.layoutTassoVincolo.visibility = View.VISIBLE
-                        binding.layoutTassoVincolo.hint = "Tasso d' Interesse"
-                        
-                        if (tipo == "Conto Corrente" || tipo == "Conto Deposito Libero") {
-                            binding.layoutPeriodoCedola.visibility = View.VISIBLE
-                            binding.layoutPeriodoCedola.hint = "Periodicità Interessi (Mesi)"
-                        }
                     }
                 }
                 "Conto Deposito" -> {
