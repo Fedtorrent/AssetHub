@@ -33,6 +33,8 @@ class ListaVincoliFragment : Fragment() {
     private var fullList: List<VincoloWithFullInfo> = emptyList()
     private var accountId: Long = -1L
     private var sortByBank = false
+    private val locallyDeletedIds = mutableSetOf<Long>()
+    private val locallyRestoredIds = mutableSetOf<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,6 +83,16 @@ class ListaVincoliFragment : Fragment() {
             },
             onDeleteClick = { item ->
                 if (item.vincolo.isDeleted) {
+                    locallyDeletedIds.remove(item.vincolo.id)
+                    locallyRestoredIds.add(item.vincolo.id)
+                    val index = fullList.indexOfFirst { it.vincolo.id == item.vincolo.id }
+                    if (index != -1) {
+                        val updatedVincolo = item.vincolo.copy(isDeleted = false)
+                        val mutableList = fullList.toMutableList()
+                        mutableList[index] = item.copy(vincolo = updatedVincolo)
+                        fullList = mutableList
+                        applyFilters(Calendar.getInstance())
+                    }
                     viewModel.restore(item.vincolo)
                     Toast.makeText(requireContext(), "Strumento ripristinato", Toast.LENGTH_SHORT).show()
                 } else {
@@ -99,7 +111,25 @@ class ListaVincoliFragment : Fragment() {
                         .setTitle("Elimina Strumento")
                         .setMessage("Sei sicuro di voler eliminare lo strumento '$nameToShow'? Verrà eliminato.")
                         .setPositiveButton("ELIMINA") { _, _ ->
-                            viewModel.delete(item.vincolo)
+                            locallyRestoredIds.remove(vincolo.id)
+                            locallyDeletedIds.add(vincolo.id)
+
+                            val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                            val showDeleted = prefs.getBoolean("show_deleted", false)
+
+                            val index = fullList.indexOfFirst { it.vincolo.id == vincolo.id }
+                            if (index != -1) {
+                                val mutableList = fullList.toMutableList()
+                                if (showDeleted) {
+                                    val updatedVincolo = vincolo.copy(isDeleted = true)
+                                    mutableList[index] = item.copy(vincolo = updatedVincolo)
+                                } else {
+                                    mutableList.removeAt(index)
+                                }
+                                fullList = mutableList
+                                applyFilters(Calendar.getInstance())
+                            }
+                            viewModel.delete(vincolo)
                         }
                         .setNegativeButton("Annulla", null)
                         .show()
@@ -119,11 +149,19 @@ class ListaVincoliFragment : Fragment() {
         )
         binding.recyclerViewVincoli.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewVincoli.adapter = adapter
+        (binding.recyclerViewVincoli.itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
 
         val now = Calendar.getInstance()
 
         viewModel.allVincoliWithFullInfo.observe(viewLifecycleOwner) { items ->
-            fullList = items
+            val merged = items.map { item ->
+                when {
+                    locallyDeletedIds.contains(item.vincolo.id) -> item.copy(vincolo = item.vincolo.copy(isDeleted = true))
+                    locallyRestoredIds.contains(item.vincolo.id) -> item.copy(vincolo = item.vincolo.copy(isDeleted = false))
+                    else -> item
+                }
+            }
+            fullList = merged
             applyFilters(now)
         }
 

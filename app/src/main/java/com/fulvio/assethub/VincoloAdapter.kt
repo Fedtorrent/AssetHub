@@ -133,7 +133,10 @@ class VincoloAdapter(
             }
 
             // Feedback visivo per eliminati
-            binding.root.alpha = if (vincolo.isDeleted || account.isDeleted || bank.isDeleted) 0.5f else 1.0f
+            val isDel = vincolo.isDeleted || account.isDeleted || bank.isDeleted
+            binding.root.setCardBackgroundColor(if (isDel) android.graphics.Color.parseColor("#121212") else android.graphics.Color.parseColor("#212121"))
+            val targetAlpha = if (isDel) 0.6f else 1.0f
+            binding.layoutContent.alpha = targetAlpha
 
             if (isEffettivamenteScaduto) {
                 binding.textStatus.text = "VINCOLO SCADUTO"
@@ -165,7 +168,10 @@ class VincoloAdapter(
         }
 
         override fun areContentsTheSame(oldItem: VincoloWithFullInfo, newItem: VincoloWithFullInfo): Boolean {
-            return oldItem == newItem
+            return oldItem.vincolo.isDeleted == newItem.vincolo.isDeleted &&
+                   oldItem.vincolo.importo == newItem.vincolo.importo &&
+                   oldItem.vincolo.nome == newItem.vincolo.nome &&
+                   oldItem == newItem
         }
     }
 }

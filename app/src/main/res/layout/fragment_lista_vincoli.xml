@@ -10,10 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:hint="Cerca vincoli (nome, banca, importo...)"
+        android:hint="Cerca strumenti (nome, banca, importo...)"
         app:startIconDrawable="@android:drawable/ic_menu_search"
         app:startIconTint="@color/teal_list"
         app:endIconMode="clear_text"
+        app:endIconTint="@color/teal_list"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

@@ -83,7 +83,10 @@ class BankAdapter(
             binding.textInstrumentsCount.text = "$activeInstrumentsCount strumenti"
 
             // Feedback visivo per eliminati
-            binding.root.alpha = if (bank.isDeleted) 0.5f else 1.0f
+            val isDel = bank.isDeleted
+            binding.root.setCardBackgroundColor(if (isDel) android.graphics.Color.parseColor("#121212") else android.graphics.Color.parseColor("#212121"))
+            val targetAlpha = if (isDel) 0.6f else 1.0f
+            binding.layoutContent.alpha = targetAlpha
 
             // Configurazione Barra Azioni
             val isSystemBank = bank.name == "Asset Personali"
@@ -114,7 +117,9 @@ class BankAdapter(
         }
 
         override fun areContentsTheSame(oldItem: BankWithAccounts, newItem: BankWithAccounts): Boolean {
-            return oldItem == newItem
+            return oldItem.bank.isDeleted == newItem.bank.isDeleted &&
+                   oldItem.bank.name == newItem.bank.name &&
+                   oldItem == newItem
         }
     }
 }

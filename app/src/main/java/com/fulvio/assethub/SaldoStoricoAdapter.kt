@@ -74,8 +74,40 @@ class SaldoStoricoAdapter(
             } else {
                 binding.textTasso.visibility = View.GONE
             }
+
+            // Calcolo differenza rispetto al movimento precedente (per Conto Corrente, Conto Deposito Libero, Fondo Pensione)
+            val shouldShowDiff = item.tipo == "Conto Corrente" || item.tipo == "Conto Deposito Libero" || item.tipo == "Fondo Pensione"
+            if (shouldShowDiff) {
+                val position = bindingAdapterPosition
+                val prevItem = if (position != RecyclerView.NO_POSITION && position + 1 < currentList.size) {
+                    currentList[position + 1]
+                } else {
+                    null
+                }
+
+                if (prevItem != null) {
+                    val diff = item.importo - prevItem.importo
+                    val prevImporto = prevItem.importo
+                    val percent = if (prevImporto != 0.0) (diff / prevImporto) * 100.0 else 0.0
+
+                    val sign = if (diff >= 0) "+" else ""
+                    val formattedDiff = "$sign${currencyFormatter.format(diff)}"
+                    val percentStr = String.format(Locale.ITALY, "%s%.1f%%", sign, percent).replace(",0%", "%")
+
+                    binding.textDiff.visibility = View.VISIBLE
+                    binding.textDiff.text = "($formattedDiff $percentStr)"
+                    binding.textDiff.setTextColor(if (diff >= 0) 0xFF4CAF50.toInt() else 0xFFF44336.toInt())
+                } else {
+                    binding.textDiff.visibility = View.GONE
+                }
+            } else {
+                binding.textDiff.visibility = View.GONE
+            }
             
-            binding.root.alpha = if (item.isDeleted) 0.5f else 1.0f
+            val isDel = item.isDeleted
+            binding.root.setCardBackgroundColor(if (isDel) android.graphics.Color.parseColor("#121212") else android.graphics.Color.parseColor("#212121"))
+            val targetAlpha = if (isDel) 0.6f else 1.0f
+            binding.layoutContent.alpha = targetAlpha
 
             binding.btnEdit.visibility = if (item.isDeleted) View.GONE else View.VISIBLE
             binding.btnEdit.setOnClickListener { onEditClick(item) }
@@ -93,6 +125,10 @@ class SaldoStoricoAdapter(
 
     class DiffCallback : DiffUtil.ItemCallback<Vincolo>() {
         override fun areItemsTheSame(oldItem: Vincolo, newItem: Vincolo) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Vincolo, newItem: Vincolo) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: Vincolo, newItem: Vincolo): Boolean {
+            return oldItem.isDeleted == newItem.isDeleted &&
+                   oldItem.importo == newItem.importo &&
+                   oldItem == newItem
+        }
     }
 }

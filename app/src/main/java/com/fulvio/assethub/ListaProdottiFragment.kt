@@ -92,6 +92,7 @@ class ListaProdottiFragment : Fragment() {
 
         binding.recyclerViewProdotti.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewProdotti.adapter = accountAdapter
+        (binding.recyclerViewProdotti.itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
 
         viewModel.allAccountsWithBankAndVincoli.observe(viewLifecycleOwner) { accounts ->
             lastAccounts = accounts

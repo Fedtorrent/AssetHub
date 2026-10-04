@@ -132,6 +132,7 @@ class StoricoAssetFragment : Fragment() {
 
         binding.recyclerViewStorico.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewStorico.adapter = adapter
+        (binding.recyclerViewStorico.itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
 
         setupHeader()
 

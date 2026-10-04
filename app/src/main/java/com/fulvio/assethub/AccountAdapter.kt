@@ -77,7 +77,10 @@ class AccountAdapter(
             binding.textAccountInfo.visibility = View.GONE
 
             // Feedback visivo per eliminati
-            binding.root.alpha = if (account.isDeleted || bank.isDeleted) 0.5f else 1.0f
+            val isDel = account.isDeleted || bank.isDeleted
+            binding.root.setCardBackgroundColor(if (isDel) android.graphics.Color.parseColor("#121212") else android.graphics.Color.parseColor("#212121"))
+            val targetAlpha = if (isDel) 0.6f else 1.0f
+            binding.layoutContent.alpha = targetAlpha
 
             // Configurazione Barra Azioni
             if (readOnly) {
@@ -109,7 +112,9 @@ class AccountAdapter(
         }
 
         override fun areContentsTheSame(oldItem: AccountWithBankAndVincoli, newItem: AccountWithBankAndVincoli): Boolean {
-            return oldItem == newItem
+            return oldItem.account.isDeleted == newItem.account.isDeleted &&
+                   oldItem.account.name == newItem.account.name &&
+                   oldItem == newItem
         }
     }
 }

@@ -74,6 +74,7 @@ class ContiFragment : Fragment() {
 
         binding.recyclerViewConti.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewConti.adapter = adapter
+        (binding.recyclerViewConti.itemAnimator as? androidx.recyclerview.widget.SimpleItemAnimator)?.supportsChangeAnimations = false
 
         val prefs = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         
