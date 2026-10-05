@@ -9,22 +9,37 @@ class VincoliRepository(private val vincoloDao: VincoloDao) {
     val allVincoliWithFullInfo: Flow<List<VincoloWithFullInfo>> = vincoloDao.getAllVincoliWithFullInfo()
 
     suspend fun insert(vincolo: Vincolo): Long {
-        return vincoloDao.insertVincolo(vincolo)
+        val now = System.currentTimeMillis()
+        val v = vincolo.copy(lastUpdate = now)
+        val id = vincoloDao.insertVincolo(v)
+        vincoloDao.updateAccountLastUpdate(vincolo.accountId, now)
+        return id
     }
 
     suspend fun update(vincolo: Vincolo) {
-        vincoloDao.updateVincolo(vincolo)
+        val now = System.currentTimeMillis()
+        val v = vincolo.copy(lastUpdate = now)
+        vincoloDao.updateVincolo(v)
+        vincoloDao.updateAccountLastUpdate(vincolo.accountId, now)
     }
 
     suspend fun delete(vincolo: Vincolo) {
+        val now = System.currentTimeMillis()
         vincoloDao.softDeleteVincolo(vincolo.id, true)
+        vincoloDao.updateVincoloLastUpdate(vincolo.id, now)
+        vincoloDao.updateAccountLastUpdate(vincolo.accountId, now)
     }
 
     suspend fun restore(vincolo: Vincolo) {
+        val now = System.currentTimeMillis()
         vincoloDao.softDeleteVincolo(vincolo.id, false)
+        vincoloDao.updateVincoloLastUpdate(vincolo.id, now)
+        vincoloDao.updateAccountLastUpdate(vincolo.accountId, now)
     }
 
     suspend fun deletePhysical(vincolo: Vincolo) {
+        val now = System.currentTimeMillis()
+        vincoloDao.updateAccountLastUpdate(vincolo.accountId, now)
         vincoloDao.deleteVincolo(vincolo)
     }
 
@@ -53,7 +68,9 @@ class VincoliRepository(private val vincoloDao: VincoloDao) {
     }
 
     suspend fun updateCodiceVincoloPerAsset(accountId: Long, nome: String, nuovoCodice: Int) {
+        val now = System.currentTimeMillis()
         vincoloDao.updateCodiceVincoloPerAsset(accountId, nome, nuovoCodice)
+        vincoloDao.updateAccountLastUpdate(accountId, now)
     }
 
     suspend fun updateCodiceVincoloById(id: Long, nuovoCodice: Int) {
@@ -65,24 +82,31 @@ class VincoliRepository(private val vincoloDao: VincoloDao) {
     val allAccountsWithBankAndVincoli: Flow<List<AccountWithBankAndVincoli>> = vincoloDao.getAllAccountsWithBankAndVincoli()
 
     suspend fun insertAccount(account: Account): Long {
-        return vincoloDao.insertAccount(account)
+        val now = System.currentTimeMillis()
+        return vincoloDao.insertAccount(account.copy(lastUpdate = now))
     }
 
     suspend fun updateAccount(account: Account) {
-        vincoloDao.updateAccount(account)
+        val now = System.currentTimeMillis()
+        vincoloDao.updateAccount(account.copy(lastUpdate = now))
     }
 
     suspend fun deleteAccount(account: Account) {
+        val now = System.currentTimeMillis()
         vincoloDao.softDeleteAccount(account.id, true)
+        vincoloDao.updateAccountLastUpdate(account.id, now)
         vincoloDao.softDeleteVincoliByAccount(account.id, true)
     }
 
     suspend fun restoreAccount(account: Account) {
+        val now = System.currentTimeMillis()
         vincoloDao.softDeleteAccount(account.id, false)
+        vincoloDao.updateAccountLastUpdate(account.id, now)
         vincoloDao.softDeleteVincoliByAccount(account.id, false)
     }
 
     suspend fun deleteAccountPhysical(account: Account) {
+        vincoloDao.deleteVincoliByAccountPhysical(account.id)
         vincoloDao.deleteAccount(account)
     }
 
@@ -103,18 +127,24 @@ class VincoliRepository(private val vincoloDao: VincoloDao) {
     }
 
     suspend fun deleteBank(bank: Bank) {
+        val now = System.currentTimeMillis()
         vincoloDao.softDeleteBank(bank.id, true)
+        vincoloDao.updateAccountsLastUpdateByBank(bank.id, now)
         vincoloDao.softDeleteAccountsByBank(bank.id, true)
         vincoloDao.softDeleteVincoliByBank(bank.id, true)
     }
 
     suspend fun restoreBank(bank: Bank) {
+        val now = System.currentTimeMillis()
         vincoloDao.softDeleteBank(bank.id, false)
+        vincoloDao.updateAccountsLastUpdateByBank(bank.id, now)
         vincoloDao.softDeleteAccountsByBank(bank.id, false)
         vincoloDao.softDeleteVincoliByBank(bank.id, false)
     }
 
     suspend fun deleteBankPhysical(bank: Bank) {
+        vincoloDao.deleteVincoliByBankPhysical(bank.id)
+        vincoloDao.deleteAccountsByBankPhysical(bank.id)
         vincoloDao.deleteBank(bank)
     }
 

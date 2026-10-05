@@ -63,8 +63,9 @@ class AccountAdapter(
             val now = System.currentTimeMillis()
             var latestTimestamp = if (account.lastUpdate <= now) account.lastUpdate else 0L
             activeVincoli.forEach { v ->
-                if (v.dataDecorrenza <= now && v.dataDecorrenza > latestTimestamp) {
-                    latestTimestamp = v.dataDecorrenza
+                val vTime = if (v.lastUpdate > 0) v.lastUpdate else v.dataDecorrenza
+                if (vTime <= now && vTime > latestTimestamp) {
+                    latestTimestamp = vTime
                 }
             }
 

@@ -53,8 +53,9 @@ class BankAdapter(
                     }
                     val activeVincoli = wrapper.vincoli.filter { !it.isDeleted }
                     activeVincoli.forEach { v ->
-                        if (v.dataDecorrenza <= now && v.dataDecorrenza > latestTimestamp) {
-                            latestTimestamp = v.dataDecorrenza
+                        val vTime = if (v.lastUpdate > 0) v.lastUpdate else v.dataDecorrenza
+                        if (vTime <= now && vTime > latestTimestamp) {
+                            latestTimestamp = vTime
                         }
                     }
                     val type = wrapper.category?.systemType ?: Category.TYPE_DEPOSITO

@@ -103,15 +103,15 @@ class DettaglioVincoloFragment : Fragment() {
         
         binding.textHeaderGrafico.text = if (isQuoteType) "Andamento valore quota" else "Andamento valore"
         
-        val points = TrendUtils.getTrendPoints(vincoli, 10)
-        if (points.size < 1) {
+        val points = TrendUtils.getTrendPoints(vincoli, 120)
+        if (points.isEmpty()) {
             binding.cardGraficoAndamento.visibility = View.GONE
             return
         }
         
         val entries = mutableListOf<Entry>()
         val labels = mutableListOf<String>()
-        val dateFormat = SimpleDateFormat("dd/MM", Locale.ITALY)
+        val dateFormat = SimpleDateFormat("dd/MM/yy", Locale.ITALY)
 
         points.forEachIndexed { index, ts ->
             val value = TrendUtils.calculateValueAtTimestamp(vincoli, ts)
@@ -137,8 +137,23 @@ class DettaglioVincoloFragment : Fragment() {
             data = LineData(dataSet)
             description.isEnabled = false
             legend.isEnabled = false
-            setScaleEnabled(false)
             setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(false)
+            setPinchZoom(false)
+            isDoubleTapToZoomEnabled = false
+
+            setOnTouchListener { v, event ->
+                when (event.action) {
+                    android.view.MotionEvent.ACTION_DOWN, android.view.MotionEvent.ACTION_MOVE -> {
+                        v.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                    android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                false
+            }
             
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
@@ -149,6 +164,7 @@ class DettaglioVincoloFragment : Fragment() {
                         return labels.getOrNull(value.toInt()) ?: ""
                     }
                 }
+                granularity = 1f
             }
 
             axisLeft.apply {
@@ -166,7 +182,21 @@ class DettaglioVincoloFragment : Fragment() {
                 }
             }
             axisRight.isEnabled = false
+
+            setVisibleXRangeMaximum(10f)
+            moveViewToX((entries.size - 1).toFloat())
             invalidate()
+        }
+    }
+
+    private fun resetChartToLatest(chart: com.github.mikephil.charting.charts.LineChart) {
+        chart.data?.let { lineData ->
+            val count = lineData.entryCount
+            if (count > 0) {
+                chart.post {
+                    chart.moveViewToX((count - 1).toFloat())
+                }
+            }
         }
     }
 
@@ -213,6 +243,7 @@ class DettaglioVincoloFragment : Fragment() {
             isGraficoExpanded = !isGraficoExpanded
             binding.contentGrafico.visibility = if (isGraficoExpanded) View.VISIBLE else View.GONE
             binding.imgArrowGrafico.rotation = if (isGraficoExpanded) 180f else 0f
+            resetChartToLatest(binding.lineChartTrend)
             if (isGraficoExpanded) {
                 binding.lineChartTrend.animateX(800)
             }

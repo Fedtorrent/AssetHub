@@ -49,6 +49,7 @@ class CruscottoFragment : Fragment() {
     private var isGraficoBancaExpanded = false
     private var isGraficoAssetExpanded = false
     private var isGraficoInvestimentiExpanded = false
+    private val cardSavedScrollY = mutableMapOf<Int, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,6 +95,19 @@ class CruscottoFragment : Fragment() {
     private fun setupCollapsibleSections() {
         val prefs = requireContext().getSharedPreferences("dashboard_prefs", Context.MODE_PRIVATE)
 
+        binding.scrollView.clipToPadding = false
+        binding.scrollView.post {
+            val h = binding.scrollView.height
+            if (h > 0) {
+                binding.scrollView.setPadding(
+                    binding.scrollView.paddingLeft,
+                    binding.scrollView.paddingTop,
+                    binding.scrollView.paddingRight,
+                    h - (60 * resources.displayMetrics.density).toInt()
+                )
+            }
+        }
+
         isTotaleExpanded = prefs.getBoolean("totale_expanded", false)
         isAndamentoExpanded = prefs.getBoolean("andamento_expanded", false)
         isCedolePagamentoExpanded = prefs.getBoolean("cedole_pagamento_expanded", false)
@@ -117,55 +131,154 @@ class CruscottoFragment : Fragment() {
         updateCollapsibleView(binding.contentGraficoInvestimenti, binding.imgArrowGraficoInvestimenti, isGraficoInvestimentiExpanded)
 
         binding.headerTotale.setOnClickListener {
-            isTotaleExpanded = !isTotaleExpanded
-            updateCollapsibleView(binding.contentTotale, binding.imgArrowTotale, isTotaleExpanded)
-            prefs.edit().putBoolean("totale_expanded", isTotaleExpanded).apply()
+            isTotaleExpanded = toggleCard(
+                binding.cardTotale,
+                binding.contentTotale,
+                binding.imgArrowTotale,
+                isTotaleExpanded,
+                "totale_expanded",
+                prefs
+            )
         }
         binding.headerAndamento.setOnClickListener {
-            isAndamentoExpanded = !isAndamentoExpanded
-            updateCollapsibleView(binding.contentAndamento, binding.imgArrowAndamento, isAndamentoExpanded)
-            prefs.edit().putBoolean("andamento_expanded", isAndamentoExpanded).apply()
+            isAndamentoExpanded = toggleCard(
+                binding.cardAndamento,
+                binding.contentAndamento,
+                binding.imgArrowAndamento,
+                isAndamentoExpanded,
+                "andamento_expanded",
+                prefs
+            )
         }
         binding.headerCedolePagamento.setOnClickListener {
-            isCedolePagamentoExpanded = !isCedolePagamentoExpanded
-            updateCollapsibleView(binding.contentCedolePagamento, binding.imgArrowCedolePagamento, isCedolePagamentoExpanded)
-            prefs.edit().putBoolean("cedole_pagamento_expanded", isCedolePagamentoExpanded).apply()
+            isCedolePagamentoExpanded = toggleCard(
+                binding.cardCedolePagamento,
+                binding.contentCedolePagamento,
+                binding.imgArrowCedolePagamento,
+                isCedolePagamentoExpanded,
+                "cedole_pagamento_expanded",
+                prefs
+            )
         }
         binding.headerVincoliScadenza.setOnClickListener {
-            isVincoliScadenzaExpanded = !isVincoliScadenzaExpanded
-            updateCollapsibleView(binding.contentVincoliScadenza, binding.imgArrowVincoliScadenza, isVincoliScadenzaExpanded)
-            prefs.edit().putBoolean("vincoli_scadenza_expanded", isVincoliScadenzaExpanded).apply()
+            isVincoliScadenzaExpanded = toggleCard(
+                binding.cardVincoliScadenza,
+                binding.contentVincoliScadenza,
+                binding.imgArrowVincoliScadenza,
+                isVincoliScadenzaExpanded,
+                "vincoli_scadenza_expanded",
+                prefs
+            )
         }
         binding.headerGraficoNomi.setOnClickListener {
-            isGraficoNomiExpanded = !isGraficoNomiExpanded
-            updateCollapsibleView(binding.contentGraficoNomi, binding.imgArrowGraficoNomi, isGraficoNomiExpanded)
-            prefs.edit().putBoolean("grafico_nomi_expanded", isGraficoNomiExpanded).apply()
+            isGraficoNomiExpanded = toggleCard(
+                binding.cardGraficoNomi,
+                binding.contentGraficoNomi,
+                binding.imgArrowGraficoNomi,
+                isGraficoNomiExpanded,
+                "grafico_nomi_expanded",
+                prefs
+            )
         }
         binding.headerGraficoTipo.setOnClickListener {
-            isGraficoTipoExpanded = !isGraficoTipoExpanded
-            updateCollapsibleView(binding.contentGraficoTipo, binding.imgArrowGraficoTipo, isGraficoTipoExpanded)
-            prefs.edit().putBoolean("grafico_tipo_expanded", isGraficoTipoExpanded).apply()
+            isGraficoTipoExpanded = toggleCard(
+                binding.cardGraficoTipo,
+                binding.contentGraficoTipo,
+                binding.imgArrowGraficoTipo,
+                isGraficoTipoExpanded,
+                "grafico_tipo_expanded",
+                prefs
+            )
         }
         binding.headerGraficoDurata.setOnClickListener {
-            isGraficoDurataExpanded = !isGraficoDurataExpanded
-            updateCollapsibleView(binding.contentGraficoDurata, binding.imgArrowGraficoDurata, isGraficoDurataExpanded)
-            prefs.edit().putBoolean("grafico_durata_expanded", isGraficoDurataExpanded).apply()
+            isGraficoDurataExpanded = toggleCard(
+                binding.cardGraficoDurata,
+                binding.contentGraficoDurata,
+                binding.imgArrowGraficoDurata,
+                isGraficoDurataExpanded,
+                "grafico_durata_expanded",
+                prefs
+            )
         }
         binding.headerGraficoBanca.setOnClickListener {
-            isGraficoBancaExpanded = !isGraficoBancaExpanded
-            updateCollapsibleView(binding.contentGraficoBanca, binding.imgArrowGraficoBanca, isGraficoBancaExpanded)
-            prefs.edit().putBoolean("grafico_banca_expanded", isGraficoBancaExpanded).apply()
+            isGraficoBancaExpanded = toggleCard(
+                binding.cardGraficoBanca,
+                binding.contentGraficoBanca,
+                binding.imgArrowGraficoBanca,
+                isGraficoBancaExpanded,
+                "grafico_banca_expanded",
+                prefs
+            )
         }
         binding.headerGraficoAsset.setOnClickListener {
-            isGraficoAssetExpanded = !isGraficoAssetExpanded
-            updateCollapsibleView(binding.contentGraficoAsset, binding.imgArrowGraficoAsset, isGraficoAssetExpanded)
-            prefs.edit().putBoolean("grafico_asset_expanded", isGraficoAssetExpanded).apply()
+            isGraficoAssetExpanded = toggleCard(
+                binding.cardGraficoAsset,
+                binding.contentGraficoAsset,
+                binding.imgArrowGraficoAsset,
+                isGraficoAssetExpanded,
+                "grafico_asset_expanded",
+                prefs
+            )
         }
         binding.headerGraficoInvestimenti.setOnClickListener {
-            isGraficoInvestimentiExpanded = !isGraficoInvestimentiExpanded
-            updateCollapsibleView(binding.contentGraficoInvestimenti, binding.imgArrowGraficoInvestimenti, isGraficoInvestimentiExpanded)
-            prefs.edit().putBoolean("grafico_investimenti_expanded", isGraficoInvestimentiExpanded).apply()
+            isGraficoInvestimentiExpanded = toggleCard(
+                binding.cardGraficoInvestimenti,
+                binding.contentGraficoInvestimenti,
+                binding.imgArrowGraficoInvestimenti,
+                isGraficoInvestimentiExpanded,
+                "grafico_investimenti_expanded",
+                prefs
+            )
         }
+    }
+
+    private fun resetChartToLatest(chart: com.github.mikephil.charting.charts.LineChart) {
+        chart.data?.let { lineData ->
+            val count = lineData.entryCount
+            if (count > 0) {
+                chart.post {
+                    chart.moveViewToX((count - 1).toFloat())
+                }
+            }
+        }
+    }
+
+    private fun toggleCard(
+        cardView: View,
+        contentView: View,
+        arrowView: View,
+        currentlyExpanded: Boolean,
+        prefKey: String,
+        prefs: android.content.SharedPreferences
+    ): Boolean {
+        val newExpanded = !currentlyExpanded
+        if (newExpanded) {
+            // Salva la posizione di scroll attuale prima dell'apertura
+            cardSavedScrollY[cardView.id] = binding.scrollView.scrollY
+            updateCollapsibleView(contentView, arrowView, true)
+            if (cardView.id == R.id.card_andamento) {
+                resetChartToLatest(binding.lineChartTotale)
+                resetChartToLatest(binding.lineChartMobiliare)
+            }
+            binding.scrollView.post {
+                val targetY = maxOf(0, cardView.top - (12 * resources.displayMetrics.density).toInt())
+                binding.scrollView.smoothScrollTo(0, targetY)
+            }
+        } else {
+            updateCollapsibleView(contentView, arrowView, false)
+            if (cardView.id == R.id.card_andamento) {
+                resetChartToLatest(binding.lineChartTotale)
+                resetChartToLatest(binding.lineChartMobiliare)
+            }
+            val savedY = cardSavedScrollY.remove(cardView.id)
+            if (savedY != null) {
+                binding.scrollView.post {
+                    binding.scrollView.smoothScrollTo(0, savedY)
+                }
+            }
+        }
+        prefs.edit().putBoolean(prefKey, newExpanded).apply()
+        return newExpanded
     }
 
     private fun toggleAll(expand: Boolean, prefs: android.content.SharedPreferences) {
@@ -190,6 +303,16 @@ class CruscottoFragment : Fragment() {
         updateCollapsibleView(binding.contentGraficoBanca, binding.imgArrowGraficoBanca, expand)
         updateCollapsibleView(binding.contentGraficoAsset, binding.imgArrowGraficoAsset, expand)
         updateCollapsibleView(binding.contentGraficoInvestimenti, binding.imgArrowGraficoInvestimenti, expand)
+
+        cardSavedScrollY.clear()
+        resetChartToLatest(binding.lineChartTotale)
+        resetChartToLatest(binding.lineChartMobiliare)
+
+        if (!expand) {
+            binding.scrollView.post {
+                binding.scrollView.smoothScrollTo(0, 0)
+            }
+        }
 
         prefs.edit().apply {
             putBoolean("totale_expanded", expand)
@@ -420,33 +543,17 @@ class CruscottoFragment : Fragment() {
     }
 
     private fun setupAndamentoCharts(allInstruments: List<InstrumentHistoryItem>) {
-        val now = System.currentTimeMillis()
-        val points = mutableListOf<Long>()
-        
-        // 1. Punto 0: Oggi
-        points.add(now)
-        
-        // 2. Altri 9 punti: fine dei mesi precedenti
-        val cal = Calendar.getInstance()
-        for (i in 1..9) {
-            cal.add(Calendar.MONTH, -1)
-            val endOfMonth = cal.clone() as Calendar
-            endOfMonth.set(Calendar.DAY_OF_MONTH, endOfMonth.getActualMaximum(Calendar.DAY_OF_MONTH))
-            endOfMonth.set(Calendar.HOUR_OF_DAY, 23)
-            endOfMonth.set(Calendar.MINUTE, 59)
-            endOfMonth.set(Calendar.SECOND, 59)
-            endOfMonth.set(Calendar.MILLISECOND, 999)
-            points.add(endOfMonth.timeInMillis)
-        }
-        
-        // Ordiniamo cronologicamente (dal più vecchio al più recente)
-        val sortedPoints = points.sorted()
+        val vincoliList = allInstruments.map { it.vincolo }
+        if (vincoliList.isEmpty()) return
+
+        val sortedPoints = TrendUtils.getTrendPoints(vincoliList, 120)
+        if (sortedPoints.isEmpty()) return
         
         val entriesTotale = mutableListOf<com.github.mikephil.charting.data.Entry>()
         val entriesMobiliare = mutableListOf<com.github.mikephil.charting.data.Entry>()
         val labels = mutableListOf<String>()
-        val df = SimpleDateFormat("dd/MM", Locale.ITALY)
-        val todayStr = df.format(Date(now))
+        val df = SimpleDateFormat("dd/MM/yy", Locale.ITALY)
+        val todayStr = df.format(Date(System.currentTimeMillis()))
 
         sortedPoints.forEachIndexed { index, ts ->
             val snapshot = calculatePortfolioAtTimestamp(allInstruments, ts)
@@ -472,7 +579,7 @@ class CruscottoFragment : Fragment() {
             val instruments = entry.value
             val systemType = instruments.first().systemType
             
-            // Filtriamo gli strumenti attivi alla data del timestamp
+            // Filtriamo gli strumenti attivi alla data del timestamp basandoci strettamente su dataDecorrenza
             val activeAtDate = instruments.filter { item ->
                 val v = item.vincolo
                 val calScadenza = Calendar.getInstance().apply {
@@ -490,8 +597,8 @@ class CruscottoFragment : Fragment() {
             if (systemType == Category.TYPE_CORRENTE || systemType == Category.TYPE_DEPOSITO_LIBERO || systemType == Category.TYPE_PENSIONE || 
                 systemType == Category.TYPE_IMMOBILI || systemType == Category.TYPE_CONTANTI || systemType == Category.TYPE_VEICOLI || 
                 systemType == Category.TYPE_GIOIELLI || systemType == Category.TYPE_OGGETTI) {
-                // Ultimo valore inserito nello storico alla data
-                balance = activeAtDate.maxBy { it.vincolo.dataDecorrenza }.vincolo.importo
+                // Ultimo valore inserito nello storico alla data basato su dataDecorrenza e id
+                balance = activeAtDate.maxWithOrNull(compareBy({ it.vincolo.dataDecorrenza }, { it.vincolo.id }))?.vincolo?.importo ?: 0.0
             } else {
                 // Deposito e Titoli: raggruppamento per nome
                 val historyGroups = activeAtDate.map { it.vincolo }.filter { InstrumentUtils.isHistoryBased(it) }
@@ -500,10 +607,10 @@ class CruscottoFragment : Fragment() {
                         val items = entryInner.value
                         if (InstrumentUtils.isIncremental("Conto Titoli", items.first().strumentoDettaglio)) {
                             val totalQuotes = items.sumOf { it.numeroQuote }
-                            val lastPrice = items.maxBy { it.dataDecorrenza }.prezzoAcquisto
+                            val lastPrice = items.maxWithOrNull(compareBy({ it.dataDecorrenza }, { it.id }))?.prezzoAcquisto ?: 0.0
                             totalQuotes * lastPrice
                         } else {
-                            items.maxBy { it.dataDecorrenza }.importo
+                            items.maxWithOrNull(compareBy({ it.dataDecorrenza }, { it.id }))?.importo ?: 0.0
                         }
                     }
                 val singleTotal = activeAtDate.map { it.vincolo }.filter { !InstrumentUtils.isHistoryBased(it) }.sumOf { it.importo }
@@ -539,8 +646,24 @@ class CruscottoFragment : Fragment() {
             data = com.github.mikephil.charting.data.LineData(dataSet)
             description.isEnabled = false
             legend.isEnabled = false
-            setScaleEnabled(false)
             setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(false)
+            setPinchZoom(false)
+            isDoubleTapToZoomEnabled = false
+
+            // Consentiamo lo scroll orizzontale del grafico senza che il NestedScrollView della pagina rubi il tocco
+            setOnTouchListener { v, event ->
+                when (event.action) {
+                    android.view.MotionEvent.ACTION_DOWN, android.view.MotionEvent.ACTION_MOVE -> {
+                        v.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                    android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                false
+            }
             
             xAxis.apply {
                 position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
@@ -552,7 +675,6 @@ class CruscottoFragment : Fragment() {
                     }
                 }
                 granularity = 1f
-                setLabelCount(labels.size)
             }
             
             axisLeft.apply {
@@ -566,6 +688,13 @@ class CruscottoFragment : Fragment() {
                 }
             }
             axisRight.isEnabled = false
+
+            // Manteniamo visibili al massimo 10 punti per volta sullo schermo
+            setVisibleXRangeMaximum(10f)
+            
+            // Ci posizioniamo in fondo a destra sul punto più recente ("Oggi")
+            moveViewToX((entries.size - 1).toFloat())
+
             animateX(800)
             invalidate()
         }

@@ -87,15 +87,12 @@ class SaldoStoricoAdapter(
 
                 if (prevItem != null) {
                     val diff = item.importo - prevItem.importo
-                    val prevImporto = prevItem.importo
-                    val percent = if (prevImporto != 0.0) (diff / prevImporto) * 100.0 else 0.0
 
                     val sign = if (diff >= 0) "+" else ""
                     val formattedDiff = "$sign${currencyFormatter.format(diff)}"
-                    val percentStr = String.format(Locale.ITALY, "%s%.1f%%", sign, percent).replace(",0%", "%")
 
                     binding.textDiff.visibility = View.VISIBLE
-                    binding.textDiff.text = "($formattedDiff $percentStr)"
+                    binding.textDiff.text = "($formattedDiff)"
                     binding.textDiff.setTextColor(if (diff >= 0) 0xFF4CAF50.toInt() else 0xFFF44336.toInt())
                 } else {
                     binding.textDiff.visibility = View.GONE

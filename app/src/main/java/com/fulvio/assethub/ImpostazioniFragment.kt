@@ -502,7 +502,8 @@ class ImpostazioniFragment : Fragment() {
                                         isDeleted = if (parts.size >= 21) parts[20].toBoolean() else false,
                                         quotaVariazione = if (parts.size >= 22) parts[21].toDoubleOrNull() ?: 0.0 else 0.0,
                                         numeroQuote = if (parts.size >= 23) parts[22].toDoubleOrNull() ?: 0.0 else 0.0,
-                                        prezzoAcquisto = if (parts.size >= 24) parts[23].toDoubleOrNull() ?: 0.0 else 0.0
+                                        prezzoAcquisto = if (parts.size >= 24) parts[23].toDoubleOrNull() ?: 0.0 else 0.0,
+                                        lastUpdate = if (parts.size >= 25 && parts[24].toLongOrNull() != null) parts[24].toLongOrNull()!! else parts[4].toLongOrNull() ?: System.currentTimeMillis()
                                     )
                                     vincoliDaInserire.add(v)
                                 }
@@ -612,10 +613,10 @@ class ImpostazioniFragment : Fragment() {
                         }
                         writer.newLine()
 
-                        writer.write("HEADER_VINCOLI;id;accountId;nome;dataDecorrenza;durataMesi;svincolabile;importo;tassoVincolo;tassoSvincolo;periodoCedolaMesi;tassazione;bolloCaricoBanca;tipo;note;codiceVincolo;interessiMaturatiPrecedenti;frequenzaRendicontazione;bolliConsolidati;strumentoDettaglio;isDeleted;quotaVariazione;numeroQuote;prezzoAcquisto")
+                        writer.write("HEADER_VINCOLI;id;accountId;nome;dataDecorrenza;durataMesi;svincolabile;importo;tassoVincolo;tassoSvincolo;periodoCedolaMesi;tassazione;bolloCaricoBanca;tipo;note;codiceVincolo;interessiMaturatiPrecedenti;frequenzaRendicontazione;bolliConsolidati;strumentoDettaglio;isDeleted;quotaVariazione;numeroQuote;prezzoAcquisto;lastUpdate")
                         writer.newLine()
                         for (v in vincoli) {
-                            val line = "VINCOLO;${v.id};${v.accountId};${escapeCsv(v.nome)};${v.dataDecorrenza};${v.durataMesi};${v.svincolabile};${v.importo};${v.tassoVincolo};${v.tassoSvincolo};${v.periodoCedolaMesi};${v.tassazione};${v.bolloCaricoBanca};${escapeCsv(v.tipo)};${escapeCsv(v.note)};${v.codiceVincolo};${v.interessiMaturatiPrecedenti};${v.frequenzaRendicontazione};${v.bolliConsolidati};${escapeCsv(v.strumentoDettaglio)};${v.isDeleted};${v.quotaVariazione};${v.numeroQuote};${v.prezzoAcquisto}"
+                            val line = "VINCOLO;${v.id};${v.accountId};${escapeCsv(v.nome)};${v.dataDecorrenza};${v.durataMesi};${v.svincolabile};${v.importo};${v.tassoVincolo};${v.tassoSvincolo};${v.periodoCedolaMesi};${v.tassazione};${v.bolloCaricoBanca};${escapeCsv(v.tipo)};${escapeCsv(v.note)};${v.codiceVincolo};${v.interessiMaturatiPrecedenti};${v.frequenzaRendicontazione};${v.bolliConsolidati};${escapeCsv(v.strumentoDettaglio)};${v.isDeleted};${v.quotaVariazione};${v.numeroQuote};${v.prezzoAcquisto};${v.lastUpdate}"
                             writer.write(line)
                             writer.newLine()
                         }

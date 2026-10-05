@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_lista_prodotti_to_storico_asset"
             app:destination="@id/navigation_storico_asset" />
+        <action
+            android:id="@+id/action_lista_prodotti_to_lista_vincoli_detail"
+            app:destination="@id/navigation_lista_vincoli_detail" />
     </fragment>
 
     <!-- Destinazione Dettaglio per Conti (per avere la freccia indietro) -->
@@ -72,6 +75,9 @@
         <action
             android:id="@+id/action_lista_prodotti_to_storico_asset"
             app:destination="@id/navigation_storico_asset" />
+        <action
+            android:id="@+id/action_lista_prodotti_to_lista_vincoli_detail"
+            app:destination="@id/navigation_lista_vincoli_detail" />
     </fragment>
 
     <fragment

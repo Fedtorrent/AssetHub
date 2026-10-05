@@ -3,6 +3,7 @@ package com.fulvio.assethub
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -248,6 +249,22 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, arguments ->
             toolbar.subtitle = null
             
+            // Visibilità della barra inferiore con animazione di scorrimento (visibile solo nelle sezioni principali)
+            val isTopLevel = when (destination.id) {
+                R.id.navigation_cruscotto,
+                R.id.navigation_conti,
+                R.id.navigation_lista_prodotti,
+                R.id.navigation_lista_vincoli,
+                R.id.navigation_utility,
+                R.id.navigation_impostazioni -> true
+                else -> false
+            }
+            if (isTopLevel) {
+                showBottomNav(navView)
+            } else {
+                hideBottomNav(navView)
+            }
+
             // Sincronizzazione automatica dell'icona nella barra inferiore
             val menuId = when (destination.id) {
                 R.id.navigation_cruscotto -> R.id.navigation_cruscotto
@@ -310,27 +327,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Listener personalizzato per Bottom Nav per gestire specificamente lo stato/ripristino
-        navView.setOnItemSelectedListener { item ->
-            val builder = androidx.navigation.NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setRestoreState(item.itemId != R.id.navigation_lista_vincoli && 
-                                item.itemId != R.id.navigation_conti && 
-                                item.itemId != R.id.navigation_lista_prodotti) 
-                .setPopUpTo(
-                    navController.graph.startDestinationId,
-                    inclusive = false,
-                    saveState = true
-                )
-            
-            try {
-                navController.navigate(item.itemId, null, builder.build())
-                true
-            } catch (e: Exception) {
-                false
-            }
-        }
-
         toolbar.setNavigationOnClickListener {
             if (!navController.navigateUp()) {
                 onBackPressedDispatcher.onBackPressed()
@@ -346,5 +342,31 @@ class MainActivity : AppCompatActivity() {
             navView.setPadding(0, 0, 0, systemBars.bottom)
             insets
         }
+    }
+
+    private fun showBottomNav(navView: View) {
+        if (navView.visibility == View.VISIBLE && navView.translationY == 0f) return
+        navView.animate().cancel()
+        navView.visibility = View.VISIBLE
+        navView.animate()
+            .translationY(0f)
+            .setDuration(350)
+            .setListener(null)
+            .start()
+    }
+
+    private fun hideBottomNav(navView: View) {
+        if (navView.visibility == View.GONE) return
+        val height = if (navView.height > 0) navView.height.toFloat() else 300f
+        navView.animate().cancel()
+        navView.animate()
+            .translationY(height)
+            .setDuration(350)
+            .setListener(object : android.animation.AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: android.animation.Animator) {
+                    navView.visibility = View.GONE
+                }
+            })
+            .start()
     }
 }

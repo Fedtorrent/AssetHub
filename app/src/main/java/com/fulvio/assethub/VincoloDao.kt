@@ -143,4 +143,22 @@ interface VincoloDao {
 
     @Query("SELECT COUNT(*) FROM useful_links")
     suspend fun getUsefulLinksCount(): Int
+
+    @Query("UPDATE accounts SET lastUpdate = :timestamp WHERE id = :accountId")
+    suspend fun updateAccountLastUpdate(accountId: Long, timestamp: Long)
+
+    @Query("UPDATE vincoli SET lastUpdate = :timestamp WHERE id = :vincoloId")
+    suspend fun updateVincoloLastUpdate(vincoloId: Long, timestamp: Long)
+
+    @Query("UPDATE accounts SET lastUpdate = :timestamp WHERE bankId = :bankId")
+    suspend fun updateAccountsLastUpdateByBank(bankId: Long, timestamp: Long)
+
+    @Query("DELETE FROM accounts WHERE bankId = :bankId")
+    suspend fun deleteAccountsByBankPhysical(bankId: Long)
+
+    @Query("DELETE FROM vincoli WHERE accountId IN (SELECT id FROM accounts WHERE bankId = :bankId)")
+    suspend fun deleteVincoliByBankPhysical(bankId: Long)
+
+    @Query("DELETE FROM vincoli WHERE accountId = :accountId")
+    suspend fun deleteVincoliByAccountPhysical(accountId: Long)
 }

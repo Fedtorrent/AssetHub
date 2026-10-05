@@ -47,11 +47,11 @@ class ListaProdottiFragment : Fragment() {
                     putInt("customColor", item.bank.color)
                 }
                 // Navigazione differenziata basata sulla categoria del conto
-                val type = item.category.systemType
+                val type = item.category?.systemType ?: Category.TYPE_DEPOSITO
                 if (type == Category.TYPE_CORRENTE || type == Category.TYPE_DEPOSITO_LIBERO || type == Category.TYPE_PENSIONE || type == Category.TYPE_IMMOBILI) {
                     findNavController().navigate(R.id.action_lista_prodotti_to_storico_asset, bundle)
                 } else {
-                    findNavController().navigate(R.id.navigation_lista_vincoli_detail, bundle)
+                    findNavController().navigate(R.id.action_lista_prodotti_to_lista_vincoli_detail, bundle)
                 }
             },
             onEditClick = { item ->

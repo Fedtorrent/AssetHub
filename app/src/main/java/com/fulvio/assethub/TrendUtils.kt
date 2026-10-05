@@ -77,7 +77,7 @@ object TrendUtils {
     fun calculateValueAtTimestamp(vincoli: List<Vincolo>, targetTimestamp: Long): Double {
         val endOfTargetDay = getEndOfDay(targetTimestamp)
         
-        // Filtriamo solo i movimenti avvenuti entro la FINE della data target
+        // Filtriamo solo i movimenti avvenuti entro la FINE della data target basandoci strettamente su dataDecorrenza
         val activeAtDate = vincoli.filter { it.dataDecorrenza <= endOfTargetDay && !it.isDeleted }
         if (activeAtDate.isEmpty()) return 0.0
 
@@ -88,11 +88,11 @@ object TrendUtils {
         return if (isHistory) {
             if (isIncremental) {
                 // PAC / ETF: Andamento del PREZZO UNITARIO (Valore Quota)
-                // Prendiamo il prezzo dell'ultimo movimento alla data
-                activeAtDate.maxByOrNull { it.dataDecorrenza }?.prezzoAcquisto ?: 0.0
+                // Prendiamo il prezzo dell'ultimo movimento alla data (ordinato per dataDecorrenza e id)
+                activeAtDate.maxWithOrNull(compareBy({ it.dataDecorrenza }, { it.id }))?.prezzoAcquisto ?: 0.0
             } else {
-                // Conti Correnti / Fondi Pensione: Ultimo importo inserito entro la data
-                activeAtDate.maxByOrNull { it.dataDecorrenza }?.importo ?: 0.0
+                // Conti Correnti / Fondi Pensione: Ultimo importo inserito entro la data (ordinato per dataDecorrenza e id)
+                activeAtDate.maxWithOrNull(compareBy({ it.dataDecorrenza }, { it.id }))?.importo ?: 0.0
             }
         } else {
             // Strumenti Singoli (BTP, Depositi): 

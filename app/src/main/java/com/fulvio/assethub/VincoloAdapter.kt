@@ -86,9 +86,10 @@ class VincoloAdapter(
             }
             
             binding.textImporto.text = currencyFormatter.format(vincolo.importo)
-            if (vincolo.dataDecorrenza <= now.timeInMillis) {
+            val updateTime = if (vincolo.lastUpdate > 0) vincolo.lastUpdate else vincolo.dataDecorrenza
+            if (updateTime <= now.timeInMillis) {
                 binding.textLastUpdate.visibility = View.VISIBLE
-                binding.textLastUpdate.text = "Ultimo Agg. ${dateFormatter.format(Date(vincolo.dataDecorrenza))}"
+                binding.textLastUpdate.text = "Ultimo Agg. ${dateFormatter.format(Date(updateTime))}"
             } else {
                 binding.textLastUpdate.visibility = View.GONE
             }

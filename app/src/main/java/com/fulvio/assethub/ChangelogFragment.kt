@@ -26,6 +26,12 @@ class ChangelogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val logText = """
+            <font color='#448AFF'><b>VERSIONE 1.4.1</b></font><br/>
+            • <b>Grafici Storici Dinamici</b>: I grafici di andamento patrimonio nel Cruscotto, nello Storico e nel Dettaglio ora supportano lo scorrimento orizzontale a gesto, mostrando l'intero storico (fino a 10 anni) con formato data chiaro (gg/mm/aa).<br/>
+            • <b>Scorrimento Intelligente Finestre</b>: All'apertura di una scheda nel Cruscotto, questa si posiziona automaticamente in prima posizione in alto; alla chiusura o con il comando "Comprimi tutto", la pagina ritorna alla posizione iniziale o in cima su "Totale Patrimonio".<br/>
+            • <b>Data Ultimo Aggiornamento Real-Time</b>: La data "Ultimo Agg." su Banche, Conti e Strumenti si aggiorna istantaneamente anche in caso di modifica, eliminazione o ripristino, preservando le date storiche dei vecchi backup.<br/>
+            • <b>Navigazione e UI Perfezionate</b>: Animazione fluida di scomparsa/riapertura della barra inferiore nelle schermate di dettaglio, pulsante "X" per cancellare la ricerca negli Strumenti e cancellazione a cascata integrata per l'eliminazione definitiva.<br/>
+            <br/>
             <font color='#448AFF'><b>VERSIONE 1.4</b></font><br/>
             • <b>Gestione Semplificata Saldi</b>: Rimossi i calcoli automatici complessi sugli interessi, lasciando l'inserimento flessibile del saldo mensile per ogni tipologia di conto o strumento.<br/>
             • <b>Calcolatrice Interessi Indipendente</b>: Reintrodotta la calcolatrice finanziaria nelle Utility, utilizzabile liberamente inserendo manualmente capitale, tasso, durata e tassazione.<br/>

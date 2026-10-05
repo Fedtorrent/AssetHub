@@ -28,5 +28,6 @@ data class Vincolo(
     val isDeleted: Boolean = false,
     val quotaVariazione: Double = 0.0,
     val numeroQuote: Double = 0.0,
-    val prezzoAcquisto: Double = 0.0
+    val prezzoAcquisto: Double = 0.0,
+    val lastUpdate: Long = System.currentTimeMillis()
 )
